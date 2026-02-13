@@ -103,6 +103,7 @@ struct NewGameView: View {
                 }
             }
             .navigationTitle("New Game")
+            .interactiveDismissDisabled(true)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
