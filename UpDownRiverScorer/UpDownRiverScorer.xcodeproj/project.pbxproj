@@ -1,0 +1,606 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		340F7E652F073CC0008A10C1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 340F7E4B2F073CBE008A10C1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 340F7E522F073CBE008A10C1;
+			remoteInfo = UpDownRiverScorer;
+		};
+		340F7E6F2F073CC0008A10C1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 340F7E4B2F073CBE008A10C1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 340F7E522F073CBE008A10C1;
+			remoteInfo = UpDownRiverScorer;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		340F7E532F073CBE008A10C1 /* UpDownRiverScorer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UpDownRiverScorer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		340F7E642F073CC0008A10C1 /* UpDownRiverScorerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UpDownRiverScorerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		340F7E6E2F073CC0008A10C1 /* UpDownRiverScorerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UpDownRiverScorerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		341ACAD92F2589D70014BB44 /* UpDownRiverScorer.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UpDownRiverScorer.xctestplan; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		340F7E762F073CC0008A10C1 /* Exceptions for "UpDownRiverScorer" folder in "UpDownRiverScorer" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 340F7E522F073CBE008A10C1 /* UpDownRiverScorer */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		340F7E552F073CBE008A10C1 /* UpDownRiverScorer */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				340F7E762F073CC0008A10C1 /* Exceptions for "UpDownRiverScorer" folder in "UpDownRiverScorer" target */,
+			);
+			path = UpDownRiverScorer;
+			sourceTree = "<group>";
+		};
+		340F7E672F073CC0008A10C1 /* UpDownRiverScorerTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = UpDownRiverScorerTests;
+			sourceTree = "<group>";
+		};
+		340F7E712F073CC0008A10C1 /* UpDownRiverScorerUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = UpDownRiverScorerUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		340F7E502F073CBE008A10C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		340F7E612F073CC0008A10C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		340F7E6B2F073CC0008A10C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		340F7E4A2F073CBE008A10C1 = {
+			isa = PBXGroup;
+			children = (
+				341ACAD92F2589D70014BB44 /* UpDownRiverScorer.xctestplan */,
+				340F7E552F073CBE008A10C1 /* UpDownRiverScorer */,
+				340F7E672F073CC0008A10C1 /* UpDownRiverScorerTests */,
+				340F7E712F073CC0008A10C1 /* UpDownRiverScorerUITests */,
+				340F7E542F073CBE008A10C1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		340F7E542F073CBE008A10C1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				340F7E532F073CBE008A10C1 /* UpDownRiverScorer.app */,
+				340F7E642F073CC0008A10C1 /* UpDownRiverScorerTests.xctest */,
+				340F7E6E2F073CC0008A10C1 /* UpDownRiverScorerUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		340F7E522F073CBE008A10C1 /* UpDownRiverScorer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 340F7E772F073CC0008A10C1 /* Build configuration list for PBXNativeTarget "UpDownRiverScorer" */;
+			buildPhases = (
+				340F7E4F2F073CBE008A10C1 /* Sources */,
+				340F7E502F073CBE008A10C1 /* Frameworks */,
+				340F7E512F073CBE008A10C1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				340F7E552F073CBE008A10C1 /* UpDownRiverScorer */,
+			);
+			name = UpDownRiverScorer;
+			packageProductDependencies = (
+			);
+			productName = UpDownRiverScorer;
+			productReference = 340F7E532F073CBE008A10C1 /* UpDownRiverScorer.app */;
+			productType = "com.apple.product-type.application";
+		};
+		340F7E632F073CC0008A10C1 /* UpDownRiverScorerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 340F7E7C2F073CC0008A10C1 /* Build configuration list for PBXNativeTarget "UpDownRiverScorerTests" */;
+			buildPhases = (
+				340F7E602F073CC0008A10C1 /* Sources */,
+				340F7E612F073CC0008A10C1 /* Frameworks */,
+				340F7E622F073CC0008A10C1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				340F7E662F073CC0008A10C1 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				340F7E672F073CC0008A10C1 /* UpDownRiverScorerTests */,
+			);
+			name = UpDownRiverScorerTests;
+			packageProductDependencies = (
+			);
+			productName = UpDownRiverScorerTests;
+			productReference = 340F7E642F073CC0008A10C1 /* UpDownRiverScorerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		340F7E6D2F073CC0008A10C1 /* UpDownRiverScorerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 340F7E7F2F073CC0008A10C1 /* Build configuration list for PBXNativeTarget "UpDownRiverScorerUITests" */;
+			buildPhases = (
+				340F7E6A2F073CC0008A10C1 /* Sources */,
+				340F7E6B2F073CC0008A10C1 /* Frameworks */,
+				340F7E6C2F073CC0008A10C1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				340F7E702F073CC0008A10C1 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				340F7E712F073CC0008A10C1 /* UpDownRiverScorerUITests */,
+			);
+			name = UpDownRiverScorerUITests;
+			packageProductDependencies = (
+			);
+			productName = UpDownRiverScorerUITests;
+			productReference = 340F7E6E2F073CC0008A10C1 /* UpDownRiverScorerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		340F7E4B2F073CBE008A10C1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2620;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					340F7E522F073CBE008A10C1 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					340F7E632F073CC0008A10C1 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 340F7E522F073CBE008A10C1;
+					};
+					340F7E6D2F073CC0008A10C1 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 340F7E522F073CBE008A10C1;
+					};
+				};
+			};
+			buildConfigurationList = 340F7E4E2F073CBE008A10C1 /* Build configuration list for PBXProject "UpDownRiverScorer" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 340F7E4A2F073CBE008A10C1;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 340F7E542F073CBE008A10C1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				340F7E522F073CBE008A10C1 /* UpDownRiverScorer */,
+				340F7E632F073CC0008A10C1 /* UpDownRiverScorerTests */,
+				340F7E6D2F073CC0008A10C1 /* UpDownRiverScorerUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		340F7E512F073CBE008A10C1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		340F7E622F073CC0008A10C1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		340F7E6C2F073CC0008A10C1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		340F7E4F2F073CBE008A10C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		340F7E602F073CC0008A10C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		340F7E6A2F073CC0008A10C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		340F7E662F073CC0008A10C1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 340F7E522F073CBE008A10C1 /* UpDownRiverScorer */;
+			targetProxy = 340F7E652F073CC0008A10C1 /* PBXContainerItemProxy */;
+		};
+		340F7E702F073CC0008A10C1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 340F7E522F073CBE008A10C1 /* UpDownRiverScorer */;
+			targetProxy = 340F7E6F2F073CC0008A10C1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		340F7E782F073CC0008A10C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = UpDownRiverScorer/UpDownRiverScorer.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2P795URB5B;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = UpDownRiverScorer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Bugger It Scorer";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.card-games";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moller.UpDownRiverScorer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		340F7E792F073CC0008A10C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = UpDownRiverScorer/UpDownRiverScorer.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2P795URB5B;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = UpDownRiverScorer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Bugger It Scorer";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.card-games";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moller.UpDownRiverScorer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		340F7E7A2F073CC0008A10C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 2P795URB5B;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		340F7E7B2F073CC0008A10C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 2P795URB5B;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		340F7E7D2F073CC0008A10C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2P795URB5B;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moller.UpDownRiverScorerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/UpDownRiverScorer.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/UpDownRiverScorer";
+			};
+			name = Debug;
+		};
+		340F7E7E2F073CC0008A10C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2P795URB5B;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moller.UpDownRiverScorerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/UpDownRiverScorer.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/UpDownRiverScorer";
+			};
+			name = Release;
+		};
+		340F7E802F073CC0008A10C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2P795URB5B;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moller.UpDownRiverScorerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = UpDownRiverScorer;
+			};
+			name = Debug;
+		};
+		340F7E812F073CC0008A10C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2P795URB5B;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moller.UpDownRiverScorerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = UpDownRiverScorer;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		340F7E4E2F073CBE008A10C1 /* Build configuration list for PBXProject "UpDownRiverScorer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				340F7E7A2F073CC0008A10C1 /* Debug */,
+				340F7E7B2F073CC0008A10C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		340F7E772F073CC0008A10C1 /* Build configuration list for PBXNativeTarget "UpDownRiverScorer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				340F7E782F073CC0008A10C1 /* Debug */,
+				340F7E792F073CC0008A10C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		340F7E7C2F073CC0008A10C1 /* Build configuration list for PBXNativeTarget "UpDownRiverScorerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				340F7E7D2F073CC0008A10C1 /* Debug */,
+				340F7E7E2F073CC0008A10C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		340F7E7F2F073CC0008A10C1 /* Build configuration list for PBXNativeTarget "UpDownRiverScorerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				340F7E802F073CC0008A10C1 /* Debug */,
+				340F7E812F073CC0008A10C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 340F7E4B2F073CBE008A10C1 /* Project object */;
+}

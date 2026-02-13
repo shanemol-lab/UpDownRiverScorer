@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "495F2085-3E42-4D3C-ABE7-0CFB175305DB",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:UpDownRiverScorer.xcodeproj",
+      "identifier" : "340F7E522F073CBE008A10C1",
+      "name" : "UpDownRiverScorer"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:UpDownRiverScorer.xcodeproj",
+        "identifier" : "340F7E632F073CC0008A10C1",
+        "name" : "UpDownRiverScorerTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:UpDownRiverScorer.xcodeproj",
+        "identifier" : "340F7E6D2F073CC0008A10C1",
+        "name" : "UpDownRiverScorerUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
