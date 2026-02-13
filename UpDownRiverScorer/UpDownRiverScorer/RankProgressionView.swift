@@ -4,6 +4,8 @@ import Charts
 struct RankProgressionView: View {
     let game: Game
 
+    @State private var filteredPlayer: Player? = nil // State to track filtered player for chart
+
     struct Point: Identifiable, Hashable {
         let id = UUID()
         let player: Player
@@ -111,10 +113,18 @@ struct RankProgressionView: View {
             if completedRounds.isEmpty {
                 ContentUnavailableView("No completed rounds yet", systemImage: "chart.line.uptrend.xyaxis", description: Text("Finish at least one round to see rank progression."))
             } else {
+                // Clear Filter Button always visible, disabled if no filter active
+                Button("Clear Filter") {
+                    filteredPlayer = nil
+                }
+                .disabled(filteredPlayer == nil)
+                .opacity(filteredPlayer == nil ? 0.5 : 1.0)
+                .padding(.bottom, 4)
+
                 let xUpperBound = max(1, completedRounds.count == 1 ? 2 : completedRounds.count)
                 Chart {
-                    // One series per player: connect their points across rounds
-                    ForEach(chartSeries, id: \.id) { series in
+                    // Filter series by selected player if any
+                    ForEach(chartSeries.filter { filteredPlayer == nil || $0.id == filteredPlayer!.id }, id: \.id) { series in
                         seriesMarks(series: series, maxRank: maxRank)
                     }
                 }
@@ -145,22 +155,29 @@ struct RankProgressionView: View {
                 .frame(minHeight: 280)
                 .padding(.top, 4)
 
-                // Combined Legend: shape + color per player
+                // Combined Legend: shape + color per player, tappable to filter
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 12) {
                         ForEach(game.orderedPlayers, id: \.id) { p in
+                            let isSelected = filteredPlayer?.id == p.id
                             HStack(spacing: 8) {
                                 Circle()
-                                    .fill(color(for: p).opacity(0.2))
+                                    .fill(color(for: p).opacity(isSelected ? 0.5 : 0.2))
                                     .frame(width: 18, height: 18)
                                     .overlay {
                                         Circle().stroke(color(for: p), lineWidth: 2)
                                     }
-                                Text(p.name).font(.footnote)
+                                Text(p.name)
+                                    .font(.footnote)
+                                    .fontWeight(isSelected ? .bold : .regular)
                             }
                             .padding(.vertical, 6)
                             .padding(.horizontal, 10)
-                            .background(.thinMaterial, in: Capsule())
+                            .background(isSelected ? color(for: p).opacity(0.2) : Color(.systemBackground).opacity(0.7))
+                            .clipShape(Capsule())
+                            .onTapGesture {
+                                filteredPlayer = isSelected ? nil : p
+                            }
                         }
                     }
                     .padding(.vertical, 4)
