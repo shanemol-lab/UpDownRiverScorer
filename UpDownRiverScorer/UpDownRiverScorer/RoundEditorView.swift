@@ -16,7 +16,15 @@ struct RoundEditorView: View {
     @StateObject private var vm = RoundEditorViewModel()
     @State private var showTricksIncompleteAlert = false
 
+    // New state variables for bid locking confirmation and state
+    @State private var showBidLockConfirmation = false
+    @State private var dontShowBidLockAgain = false
+    @State private var bidsLocked = false
+
     private var R: Int { round.cardsPerPlayer }
+    
+    // Computed property to detect if the round is complete (all tricks allocated and round marked as done)
+    private var isRoundComplete: Bool { round.isValid }
 
     private var sortedEntries: [RoundEntry] {
         round.entries.sorted { ($0.player?.sortIndex ?? 0) < ($1.player?.sortIndex ?? 0) }
@@ -44,6 +52,7 @@ struct RoundEditorView: View {
                         Text("\(entry.player?.name ?? "Player")\(isDealer ? " (Dealer)" : "")")
                         Spacer()
                         if vm.phase == .bids {
+                            // Disable editing bids if round is complete or bids are locked
                             HStack(spacing: 12) {
                                 Button {
                                     entry.bid = max(0, entry.bid - 1)
@@ -54,7 +63,7 @@ struct RoundEditorView: View {
                                         .font(.title3)
                                 }
                                 .buttonStyle(.plain)
-                                .disabled(entry.bid <= 0)
+                                .disabled(entry.bid <= 0 || bidsLocked || isRoundComplete)
 
                                 Text("\(entry.bid)")
                                     .monospacedDigit()
@@ -69,9 +78,10 @@ struct RoundEditorView: View {
                                         .font(.title3)
                                 }
                                 .buttonStyle(.plain)
-                                .disabled(entry.bid >= R)
+                                .disabled(entry.bid >= R || bidsLocked || isRoundComplete)
                             }
                         } else {
+                            // Disable editing tricks if round is complete
                             HStack(spacing: 12) {
                                 Button {
                                     entry.tricks = max(0, entry.tricks - 1)
@@ -81,7 +91,7 @@ struct RoundEditorView: View {
                                         .font(.title3)
                                 }
                                 .buttonStyle(.plain)
-                                .disabled(entry.tricks <= 0)
+                                .disabled(entry.tricks <= 0 || isRoundComplete)
 
                                 Text("\(entry.tricks)")
                                     .monospacedDigit()
@@ -100,7 +110,7 @@ struct RoundEditorView: View {
                                         .font(.title3)
                                 }
                                 .buttonStyle(.plain)
-                                .disabled(entry.tricks >= maxForThisPlayer)
+                                .disabled(entry.tricks >= maxForThisPlayer || isRoundComplete)
                             }
                         }
                     }
@@ -161,6 +171,11 @@ struct RoundEditorView: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") {
+                    // If the round is already complete, immediately dismiss without showing bid lock confirmation
+                    if round.isValid {
+                        dismiss()
+                        return
+                    }
                     // Enforce correctness before leaving
                     if vm.phase == .bids {
                         // Validate current bids
@@ -178,8 +193,18 @@ struct RoundEditorView: View {
                                 }
                             }
                         }
+                        // New logic: If bids not locked and no suppression of confirmation, prompt user
                         if bidsOK && (game.dealerForbiddenBidEnabled ? vm.totalBids != R : true) {
-                            vm.phase = .tricks
+                            if !bidsLocked && !dontShowBidLockAgain {
+                                // Show sheet instead of confirmationDialog for bid lock confirmation
+                                showBidLockConfirmation = true
+                                // Do not advance phase yet
+                                return
+                            } else {
+                                // Either already locked or user chose don't show again: lock bids and advance
+                                bidsLocked = true
+                                vm.phase = .tricks
+                            }
                         }
                     } else {
                         let bidsOK = vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
@@ -192,6 +217,41 @@ struct RoundEditorView: View {
                     }
                 }
             }
+        }
+        // MARK: - Sheet for bid lock confirmation (replacing confirmationDialog)
+        .sheet(isPresented: $showBidLockConfirmation) {
+            VStack(spacing: 20) {
+                Text("Lock in Bids?")
+                    .font(.title2)
+                    .bold()
+                    .padding(.top)
+                Text("Bids cannot be changed after proceeding. Are you sure you want to lock in these bids?")
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                // Toggle for suppressing dialog in current game session
+                Toggle("Don't show again during this game", isOn: $dontShowBidLockAgain)
+                    .toggleStyle(SwitchToggleStyle())
+                    .padding(.horizontal)
+
+                HStack {
+                    Button("Change Bids") {
+                        // Dismiss sheet to allow edits
+                        showBidLockConfirmation = false
+                    }
+                    Spacer()
+                    Button("Proceed") {
+                        // Lock bids and advance to tricks phase, then dismiss sheet
+                        bidsLocked = true
+                        vm.phase = .tricks
+                        showBidLockConfirmation = false
+                    }
+                    .foregroundColor(.red)
+                }
+                .padding(.horizontal)
+                .padding(.bottom)
+            }
+            // Ensure the sheet content adapts nicely on all device sizes
+            .presentationDetents([.fraction(0.35)])
         }
         .alert("Incomplete Tricks Allocation", isPresented: $showTricksIncompleteAlert) {
             Button("OK", role: .cancel) { }
