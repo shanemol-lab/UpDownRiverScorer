@@ -45,7 +45,61 @@ struct RoundEditorView: View {
             }
             .pickerStyle(.segmented)
 
-            Section(vm.phase == .bids ? "Bids" : "Tricks") {
+            // MARK: - Custom header with phase title and Done button above player list
+            HStack {
+                Text(vm.phase == .bids ? "Bids" : "Tricks")
+                    .font(.headline)
+                Spacer()
+                Button("Done") {
+                    // Same logic as toolbar Done button
+                    if round.isValid {
+                        dismiss()
+                        return
+                    }
+                    if vm.phase == .bids {
+                        let bidsOK = vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
+                        if game.dealerForbiddenBidEnabled {
+                            if vm.totalBids == R {
+                                let dealerId = round.dealer?.id
+                                let nonDealerSum = round.entries.filter { $0.player?.id != dealerId }.reduce(0) { $0 + $1.bid }
+                                let forbidden = R - nonDealerSum
+                                if let dealerBid = round.entries.first(where: { $0.player?.id == dealerId })?.bid {
+                                    vm.bidMessage = "Total bids equal total cards (\(R)). Dealer cannot bid \(forbidden). Dealer currently bid \(dealerBid). Adjust bids before continuing."
+                                } else {
+                                    vm.bidMessage = "Total bids equal total cards (\(R)). Dealer cannot bid \(forbidden). Adjust bids before continuing."
+                                }
+                            }
+                        }
+                        if bidsOK && (game.dealerForbiddenBidEnabled ? vm.totalBids != R : true) {
+                            if !bidsLocked && !dontShowBidLockAgain {
+                                showBidLockConfirmation = true
+                                return
+                            } else {
+                                bidsLocked = true
+                                vm.phase = .tricks
+                            }
+                        }
+                    } else {
+                        let bidsOK = vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
+                        let tricksOK = vm.validateTricks(round: round)
+                        if bidsOK && tricksOK {
+                            dismiss()
+                        } else if !tricksOK {
+                            showTricksIncompleteAlert = true
+                        }
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                // Disable Done button if editing bids and total bids invalid or locked or round complete
+                .disabled(
+                    (vm.phase == .bids && (bidsLocked || !vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled) || isRoundComplete))
+                    ||
+                    (vm.phase == .tricks && (isRoundComplete || !vm.validateTricks(round: round)))
+                )
+            }
+            .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
+
+            Section {
                 ForEach(sortedEntries) { entry in
                     HStack {
                         let isDealer = entry.player?.id == round.dealer?.id
@@ -134,8 +188,6 @@ struct RoundEditorView: View {
                 }
             }
 
-            // (Removed invalid out-of-scope entry block)
-
             if vm.phase == .tricks {
                 Section("Tricks remaining") {
                     let used = round.entries.reduce(0) { $0 + $1.tricks }
@@ -168,56 +220,7 @@ struct RoundEditorView: View {
             _ = vm.validateTricks(round: round)
             vm.updateTotalBids(from: round)
         }
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Done") {
-                    // If the round is already complete, immediately dismiss without showing bid lock confirmation
-                    if round.isValid {
-                        dismiss()
-                        return
-                    }
-                    // Enforce correctness before leaving
-                    if vm.phase == .bids {
-                        // Validate current bids
-                        let bidsOK = vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
-                        // Enforce dealer rule: total bids cannot equal total cards for the round
-                        if game.dealerForbiddenBidEnabled {
-                            if vm.totalBids == R {
-                                let dealerId = round.dealer?.id
-                                let nonDealerSum = round.entries.filter { $0.player?.id != dealerId }.reduce(0) { $0 + $1.bid }
-                                let forbidden = R - nonDealerSum
-                                if let dealerBid = round.entries.first(where: { $0.player?.id == dealerId })?.bid {
-                                    vm.bidMessage = "Total bids equal total cards (\(R)). Dealer cannot bid \(forbidden). Dealer currently bid \(dealerBid). Adjust bids before continuing."
-                                } else {
-                                    vm.bidMessage = "Total bids equal total cards (\(R)). Dealer cannot bid \(forbidden). Adjust bids before continuing."
-                                }
-                            }
-                        }
-                        // New logic: If bids not locked and no suppression of confirmation, prompt user
-                        if bidsOK && (game.dealerForbiddenBidEnabled ? vm.totalBids != R : true) {
-                            if !bidsLocked && !dontShowBidLockAgain {
-                                // Show sheet instead of confirmationDialog for bid lock confirmation
-                                showBidLockConfirmation = true
-                                // Do not advance phase yet
-                                return
-                            } else {
-                                // Either already locked or user chose don't show again: lock bids and advance
-                                bidsLocked = true
-                                vm.phase = .tricks
-                            }
-                        }
-                    } else {
-                        let bidsOK = vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
-                        let tricksOK = vm.validateTricks(round: round)
-                        if bidsOK && tricksOK {
-                            dismiss()
-                        } else if !tricksOK {
-                            showTricksIncompleteAlert = true
-                        }
-                    }
-                }
-            }
-        }
+        // Removed toolbar Done button as per instructions
         // MARK: - Sheet for bid lock confirmation (replacing confirmationDialog)
         .sheet(isPresented: $showBidLockConfirmation) {
             VStack(spacing: 20) {

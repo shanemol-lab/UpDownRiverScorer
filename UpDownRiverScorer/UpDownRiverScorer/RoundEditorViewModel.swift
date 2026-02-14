@@ -27,7 +27,9 @@ final class RoundEditorViewModel: ObservableObject {
         for e in round.entries {
             sum += e.bid
         }
-        totalBids = sum
+        DispatchQueue.main.async { [weak self] in
+            self?.totalBids = sum
+        }
     }
 
     func validateBids(round: Round, enforceDealerForbidden: Bool = true) -> Bool {
@@ -40,7 +42,9 @@ final class RoundEditorViewModel: ObservableObject {
         }
 
         let result = Rules.validateBids(cardsPerPlayer: R, dealerPlayerId: dealerId, bidsByPlayerId: bids, enforceDealerForbidden: enforceDealerForbidden)
-        bidMessage = result.message
+        DispatchQueue.main.async { [weak self] in
+            self?.bidMessage = result.message
+        }
         updateTotalBids(from: round)
         return result.isValid
     }
@@ -54,7 +58,9 @@ final class RoundEditorViewModel: ObservableObject {
         }
 
         let result = Rules.validateTricks(cardsPerPlayer: R, tricksByPlayerId: tricks)
-        trickMessage = result.message
+        DispatchQueue.main.async { [weak self] in
+            self?.trickMessage = result.message
+        }
         return result.isValid
     }
 }
