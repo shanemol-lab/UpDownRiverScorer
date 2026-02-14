@@ -95,8 +95,6 @@ struct RoundEditorView: View {
                 // Disable Done button if editing bids and total bids invalid or locked or round complete
                 .disabled(
                     (vm.phase == .bids && (bidsLocked || !vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled) || isRoundComplete))
-                    ||
-                    (vm.phase == .tricks && (isRoundComplete || !vm.validateTricks(round: round)))
                 )
             }
             .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
