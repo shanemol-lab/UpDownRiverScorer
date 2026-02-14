@@ -126,7 +126,9 @@ struct GameDetailView: View {
                 }
                 .id("top")
 
-                Section("Rounds") {
+                // Custom Header for Rounds Section with Next Round button beside the title
+                Section {
+                    // The rounds list rows
                     ForEach(sortedRounds) { round in
                         RoundRow(game: game, round: round)
                     }
@@ -138,6 +140,35 @@ struct GameDetailView: View {
                         .buttonStyle(.borderedProminent)
                         .tint(.red)
                     }
+                } header: {
+                    // Header is a horizontal stack containing the section title and the Next Round button beside it
+                    HStack {
+                        Text("Rounds")
+                            .font(.headline)
+                        Spacer()
+                        if !game.isGameCompleted {
+                            Button("Next Round") {
+                                if game.isGameCompleted { return }
+                                if let msg = currentRoundCompletionMessage() {
+                                    roundIncompleteMessage = msg
+                                    showRoundIncompleteAlert = true
+                                } else {
+                                    if let newRound = addNextRound() {
+                                        // Scroll to the new round first, then navigate
+                                        DispatchQueue.main.async {
+                                            proxy.scrollTo(newRound.id, anchor: .center)
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                navigateToRound = newRound
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            .disabled(game.isGameCompleted || currentRoundCompletionMessage() != nil)
+                            .buttonStyle(.borderedProminent)
+                        }
+                    }
+                    .padding(.bottom, 4) // spacing below header for clarity
                 }
 
                 if let round = currentRound {
@@ -152,30 +183,7 @@ struct GameDetailView: View {
                 }
             }
             .navigationTitle("Game")
-            .toolbar {
-                // Compute message outside of the ToolbarItem builder to avoid ambiguity
-                let message = currentRoundCompletionMessage()
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Next Round") {
-                        if game.isGameCompleted { return }
-                        if let msg = currentRoundCompletionMessage() {
-                            roundIncompleteMessage = msg
-                            showRoundIncompleteAlert = true
-                        } else {
-                            if let newRound = addNextRound() {
-                                // Scroll to the new round first, then navigate
-                                DispatchQueue.main.async {
-                                    proxy.scrollTo(newRound.id, anchor: .center)
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                        navigateToRound = newRound
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    .disabled(game.isGameCompleted || message != nil)
-                }
-            }
+            // REMOVED the ToolbarItem placing "Next Round" button in the navigation bar
             .alert("Complete current round first", isPresented: $showRoundIncompleteAlert) {
                 Button("OK", role: .cancel) {}
             } message: {
