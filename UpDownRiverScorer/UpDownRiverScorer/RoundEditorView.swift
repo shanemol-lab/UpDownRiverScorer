@@ -18,7 +18,6 @@ struct RoundEditorView: View {
 
     // New state variables for bid locking confirmation and state
     @State private var showBidLockConfirmation = false
-    @State private var dontShowBidLockAgain = false
     @State private var bidsLocked = false
 
     private var R: Int { round.cardsPerPlayer }
@@ -72,7 +71,7 @@ struct RoundEditorView: View {
                             }
                         }
                         if bidsOK && (game.dealerForbiddenBidEnabled ? vm.totalBids != R : true) {
-                            if !bidsLocked && !dontShowBidLockAgain {
+                            if !bidsLocked && !game.suppressBidLockConfirmation {
                                 showBidLockConfirmation = true
                                 return
                             } else {
@@ -232,9 +231,12 @@ struct RoundEditorView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
                 // Toggle for suppressing dialog in current game session
-                Toggle("Don't show again during this game", isOn: $dontShowBidLockAgain)
-                    .toggleStyle(SwitchToggleStyle())
-                    .padding(.horizontal)
+                Toggle("Don't show again during this game", isOn: Binding(
+                    get: { game.suppressBidLockConfirmation },
+                    set: { game.suppressBidLockConfirmation = $0 }
+                ))
+                .toggleStyle(SwitchToggleStyle())
+                .padding(.horizontal)
 
                 HStack {
                     Button("Change Bids") {

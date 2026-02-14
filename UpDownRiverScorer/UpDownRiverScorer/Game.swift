@@ -28,6 +28,9 @@ final class Game {
     /// If true, the game has begun the downward sequence early
     var startedBackDown: Bool = false
 
+    /// When true, suppresses the "Lock in Bids" confirmation sheet for the remainder of this game.
+    var suppressBidLockConfirmation: Bool = false
+
     /// Stable clockwise seating order (Player 1, Player 2, ...)
     var orderedPlayers: [Player] {
         players.sorted { $0.sortIndex < $1.sortIndex }
