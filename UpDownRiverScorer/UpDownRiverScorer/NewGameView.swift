@@ -270,11 +270,11 @@ struct NewGameView: View {
             if let n = vm.maximumHandSize { vm.maximumHandSize = min(max(1, n), allowed) }
         }
         let game = vm.createGame(modelContext: modelContext)
-        // Precreate first round for convenience
         ensureCurrentRoundExists(game: game, modelContext: modelContext)
+        // Notify parent to present the game full-screen
+        NotificationCenter.default.post(name: Notification.Name("PresentGameFullScreen"), object: game)
+        // Dismiss this sheet
         dismiss()
-        // Navigation will happen from list
-        _ = game
     }
 
     private func ensureCurrentRoundExists(game: Game, modelContext: ModelContext) {

@@ -11,11 +11,13 @@ struct GameDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Bindable var game: Game
+    var isModal: Bool = false
     
     @State private var showRoundIncompleteAlert = false
     @State private var roundIncompleteMessage: String = ""
     @State private var navigateToRound: Round?
     @State private var showEndGameOptions = false
+    @State private var showFirstVisitHint = false
 
     private var totals: [(Player, Int)] {
         let t = ScoringEngine.totals(game: game)
@@ -183,6 +185,18 @@ struct GameDetailView: View {
                 }
             }
             .navigationTitle("Game")
+            .toolbar {
+                if isModal {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Label("Back", systemImage: "chevron.left")
+                        }
+                        .accessibilityLabel("Back")
+                    }
+                }
+            }
             // REMOVED the ToolbarItem placing "Next Round" button in the navigation bar
             .alert("Complete current round first", isPresented: $showRoundIncompleteAlert) {
                 Button("OK", role: .cancel) {}
@@ -213,6 +227,19 @@ struct GameDetailView: View {
                         proxy.scrollTo("top", anchor: .top)
                     }
                 }
+            }
+            .onAppear {
+                if game.showFirstVisitHint {
+                    game.showFirstVisitHint = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        showFirstVisitHint = true
+                    }
+                }
+            }
+            .alert("Welcome", isPresented: $showFirstVisitHint) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("Tap Round 1 to begin the first round.")
             }
             // Removed .navigationDestination(for: Round.self) {...}
             .navigationDestination(item: $navigateToRound) { round in

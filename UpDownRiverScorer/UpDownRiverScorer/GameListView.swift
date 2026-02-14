@@ -11,14 +11,16 @@ struct GameListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Game.createdAt, order: .reverse) private var games: [Game]
     @State private var showingNewGame = false
+    @State private var path: [UUID] = []
+    @State private var pendingGameId: UUID? = nil
+    @State private var showGameFullScreen = false
+    @State private var createdGameForFullScreen: Game? = nil
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List {
                 ForEach(games) { game in
-                    NavigationLink {
-                        GameDetailView(game: game)
-                    } label: {
+                    NavigationLink(value: game.id) {
                         GameRowView(game: game)
                     }
                     .swipeActions(edge: .trailing) {
@@ -70,9 +72,36 @@ struct GameListView: View {
                     }
                 }
             }
+            .navigationDestination(for: UUID.self) { gameId in
+                if let game = games.first(where: { $0.id == gameId }) {
+                    GameDetailView(game: game)
+                } else {
+                    ContentUnavailableView("Loading Game", systemImage: "hourglass", description: Text("Please wait..."))
+                }
+            }
         }
         .sheet(isPresented: $showingNewGame) {
             NewGameView()
+        }
+        .onChange(of: showingNewGame) { oldValue, isPresented in
+            if oldValue == true && isPresented == false {
+                pendingGameId = nil
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: Notification.Name("PresentGameFullScreen"))) { output in
+            if let game = output.object as? Game {
+                createdGameForFullScreen = game
+                showGameFullScreen = true
+            }
+        }
+        .fullScreenCover(isPresented: $showGameFullScreen) {
+            if let game = createdGameForFullScreen {
+                NavigationStack {
+                    GameDetailView(game: game, isModal: true)
+                }
+            } else {
+                ContentUnavailableView("Loading Game", systemImage: "hourglass")
+            }
         }
     }
 

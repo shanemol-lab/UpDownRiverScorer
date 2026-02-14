@@ -28,6 +28,9 @@ final class Game {
     /// If true, the game has begun the downward sequence early
     var startedBackDown: Bool = false
 
+    /// When true, show a one-time hint in Game view instructing the user to tap Round 1 to begin.
+    var showFirstVisitHint: Bool = true
+
     /// When true, suppresses the "Lock in Bids" confirmation sheet for the remainder of this game.
     var suppressBidLockConfirmation: Bool = false
 

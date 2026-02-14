@@ -28,7 +28,7 @@ struct UpDownRiverScorerApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            GameListView()
         }
         .modelContainer(sharedModelContainer)
     }

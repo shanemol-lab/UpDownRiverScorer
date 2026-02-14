@@ -1,18 +1,10 @@
-//
-//  CardScoreApp.swift
-//  UpDownRiverScorer
-//
-//  Created by Shane Moller on 02/01/2026.
-//
-import SwiftUI
-import SwiftData
+// CardScoreApp has been disabled as an app entry point. Use UpDownRiverScorerApp as the single @main entry.
+// This file remains for reference and can be removed from the build target.
 
-// Removed duplicate @main app entry; use UpDownRiverScorerApp as the single app entry.
-struct CardScoreApp: App {
-    var body: some Scene {
-        WindowGroup {
-            GameListView()
-        }
-        .modelContainer(for: [Game.self, Player.self, Round.self, RoundEntry.self])
+import SwiftUI
+
+struct CardScoreApp_Previews: PreviewProvider {
+    static var previews: some View {
+        GameListView()
     }
 }
