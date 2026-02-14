@@ -5,10 +5,19 @@
 //  Created by Shane Moller on 02/01/2026.
 //
 import Foundation
+import SwiftUI
 import Combine
 
 @MainActor
 final class RoundEditorViewModel: ObservableObject {
+
+    /// Leading padding to apply to the Bids/Tricks section titles in the Round editor UI.
+    /// Adjust this to move the titles away from the left-hand border of their container.
+    @Published var titleLeadingPadding: CGFloat = 12
+
+    /// Trailing padding to apply to the Done button (CTA) in the Round editor UI.
+    /// Adjust this to move the button away from the right-hand border of its container.
+    @Published var doneTrailingPadding: CGFloat = 12
 
     enum Phase: String, CaseIterable {
         case bids = "Bids"

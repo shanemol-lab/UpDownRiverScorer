@@ -49,6 +49,7 @@ struct RoundEditorView: View {
             HStack {
                 Text(vm.phase == .bids ? "Bids" : "Tricks")
                     .font(.headline)
+                    .padding(.leading, vm.titleLeadingPadding)
                 Spacer()
                 Button("Done") {
                     // Same logic as toolbar Done button
@@ -90,6 +91,7 @@ struct RoundEditorView: View {
                     }
                 }
                 .buttonStyle(.borderedProminent)
+                .padding(.trailing, vm.doneTrailingPadding)
                 // Disable Done button if editing bids and total bids invalid or locked or round complete
                 .disabled(
                     (vm.phase == .bids && (bidsLocked || !vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled) || isRoundComplete))
