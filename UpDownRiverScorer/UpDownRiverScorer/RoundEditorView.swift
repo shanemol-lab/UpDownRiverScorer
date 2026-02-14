@@ -14,6 +14,7 @@ struct RoundEditorView: View {
     @Bindable var round: Round
 
     @StateObject private var vm = RoundEditorViewModel()
+    @State private var showTricksIncompleteAlert = false
 
     private var R: Int { round.cardsPerPlayer }
 
@@ -183,10 +184,19 @@ struct RoundEditorView: View {
                     } else {
                         let bidsOK = vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
                         let tricksOK = vm.validateTricks(round: round)
-                        if bidsOK && tricksOK { dismiss() }
+                        if bidsOK && tricksOK {
+                            dismiss()
+                        } else if !tricksOK {
+                            showTricksIncompleteAlert = true
+                        }
                     }
                 }
             }
+        }
+        .alert("Incomplete Tricks Allocation", isPresented: $showTricksIncompleteAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("All tricks must be allocated before the round can be completed. Adjust the trick values so the total matches the required tricks for this round.")
         }
     }
 }
