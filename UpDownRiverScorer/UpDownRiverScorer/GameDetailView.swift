@@ -52,17 +52,30 @@ struct GameDetailView: View {
         let game: Game
         let round: Round
         var body: some View {
-            NavigationLink {
-                RoundEditorView(game: game, round: round)
-            } label: {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Round \(round.index + 1) — \(round.cardsPerPlayer) card(s)")
-                    if let dealer = round.dealer?.name {
-                        Text("Dealer: \(dealer)")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
+            ZStack {
+                NavigationLink {
+                    RoundEditorView(game: game, round: round)
+                } label: {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Round \(round.index + 1) — \(round.cardsPerPlayer) card(s)")
+                        if let dealer = round.dealer?.name {
+                            Text("Dealer: \(dealer)")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
+                // Overlay a completed checkmark icon at trailing if the round is valid (completed)
+                // Similar to the completed game tag style
+                HStack {
+                    Spacer()
+                    if round.isValid {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
+                    }
+                }
+                .padding(.trailing, 18) // padding to align nicely with NavigationLink chevron
+                .allowsHitTesting(false) // prevent blocking tap area of NavigationLink
             }
             .id(round.id)
         }
