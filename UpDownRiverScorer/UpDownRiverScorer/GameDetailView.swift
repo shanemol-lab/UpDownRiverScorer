@@ -125,6 +125,17 @@ struct GameDetailView: View {
                         Spacer()
                     }
                     .padding(.top, 6)
+                    HStack {
+                        Spacer()
+                        NavigationLink {
+                            OverallScoreProgressView(game: game)
+                        } label: {
+                            Label("View Overall Score Progress", systemImage: "chart.line.uptrend.xyaxis")
+                                .font(.headline)
+                        }
+                        Spacer()
+                    }
+                    .padding(.top, 2)
                 }
                 .id("top")
 

@@ -19,15 +19,6 @@ struct RankProgressionView: View {
         let points: [Point]
     }
 
-    private let playerColors: [Color] = [
-        .red, .blue, .green, .orange, .purple, .pink, .teal, .brown, .black, .gray
-    ]
-    
-    private func color(for player: Player) -> Color {
-        let idx = game.orderedPlayers.firstIndex(where: { $0.id == player.id }) ?? 0
-        return playerColors[idx % playerColors.count]
-    }
-
     private var completedRounds: [Round] {
         game.rounds
             .sorted { $0.index < $1.index }
@@ -83,7 +74,7 @@ struct RankProgressionView: View {
                 .sorted { $0.roundIndex < $1.roundIndex }
             return PlayerSeries(
                 id: p.id,
-                color: color(for: p),
+                color: game.color(for: p),
                 points: seriesPoints
             )
         }
@@ -162,10 +153,10 @@ struct RankProgressionView: View {
                             let isSelected = filteredPlayer?.id == p.id
                             HStack(spacing: 8) {
                                 Circle()
-                                    .fill(color(for: p).opacity(isSelected ? 0.5 : 0.2))
+                                    .fill(game.color(for: p).opacity(isSelected ? 0.5 : 0.2))
                                     .frame(width: 18, height: 18)
                                     .overlay {
-                                        Circle().stroke(color(for: p), lineWidth: 2)
+                                        Circle().stroke(game.color(for: p), lineWidth: 2)
                                     }
                                 Text(p.name)
                                     .font(.footnote)
@@ -173,7 +164,7 @@ struct RankProgressionView: View {
                             }
                             .padding(.vertical, 6)
                             .padding(.horizontal, 10)
-                            .background(isSelected ? color(for: p).opacity(0.2) : Color(.systemBackground).opacity(0.7))
+                            .background(isSelected ? game.color(for: p).opacity(0.2) : Color(.systemBackground).opacity(0.7))
                             .clipShape(Capsule())
                             .onTapGesture {
                                 filteredPlayer = isSelected ? nil : p
