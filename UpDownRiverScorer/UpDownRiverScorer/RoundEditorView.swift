@@ -20,10 +20,21 @@ struct RoundEditorView: View {
     @State private var showBidLockConfirmation = false
     @State private var bidsLocked = false
 
+    // New state variable for tricks locking state
+    @State private var tricksLocked = false
+
+    @State private var phase: RoundEditorViewModel.Phase = .bids
+
     private var R: Int { round.cardsPerPlayer }
     
     // Computed property to detect if the round is complete (all tricks allocated and round marked as done)
     private var isRoundComplete: Bool { round.isValid }
+    
+    // Added computed property per instructions
+    private var isActiveRound: Bool { game.rounds.last?.id == round.id }
+    
+    // Updated computed property per instructions
+    private var isTrickEditingLocked: Bool { isActiveRound ? tricksLocked : true }
 
     private var sortedEntries: [RoundEntry] {
         round.entries.sorted { ($0.player?.sortIndex ?? 0) < ($1.player?.sortIndex ?? 0) }
@@ -37,7 +48,7 @@ struct RoundEditorView: View {
                 LabeledContent("Dealer") { Text(round.dealer?.name ?? "—") }
             }
 
-            Picker("Phase", selection: $vm.phase) {
+            Picker("Phase", selection: $phase) {
                 ForEach(RoundEditorViewModel.Phase.allCases, id: \.self) { p in
                     Text(p.rawValue).tag(p)
                 }
@@ -46,7 +57,7 @@ struct RoundEditorView: View {
 
             // MARK: - Custom header with phase title and Done button above player list
             HStack {
-                Text(vm.phase == .bids ? "Bids" : "Tricks")
+                Text(phase == .bids ? "Bids" : "Tricks")
                     .font(.headline)
                     .padding(.leading, vm.titleLeadingPadding)
                 Spacer()
@@ -56,7 +67,7 @@ struct RoundEditorView: View {
                         dismiss()
                         return
                     }
-                    if vm.phase == .bids {
+                    if phase == .bids {
                         let bidsOK = vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
                         if game.dealerForbiddenBidEnabled {
                             if vm.totalBids == R {
@@ -76,13 +87,14 @@ struct RoundEditorView: View {
                                 return
                             } else {
                                 bidsLocked = true
-                                vm.phase = .tricks
+                                phase = .tricks
                             }
                         }
                     } else {
                         let bidsOK = vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
                         let tricksOK = vm.validateTricks(round: round)
                         if bidsOK && tricksOK {
+                            tricksLocked = true
                             dismiss()
                         } else if !tricksOK {
                             showTricksIncompleteAlert = true
@@ -93,7 +105,7 @@ struct RoundEditorView: View {
                 .padding(.trailing, vm.doneTrailingPadding)
                 // Disable Done button if editing bids and total bids invalid or locked or round complete
                 .disabled(
-                    (vm.phase == .bids && (bidsLocked || !vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled) || isRoundComplete))
+                    (phase == .bids && (bidsLocked || !vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled) || isRoundComplete))
                 )
             }
             .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
@@ -104,7 +116,7 @@ struct RoundEditorView: View {
                         let isDealer = entry.player?.id == round.dealer?.id
                         Text("\(entry.player?.name ?? "Player")\(isDealer ? " (Dealer)" : "")")
                         Spacer()
-                        if vm.phase == .bids {
+                        if phase == .bids {
                             // Disable editing bids if round is complete or bids are locked
                             HStack(spacing: 12) {
                                 Button {
@@ -134,7 +146,7 @@ struct RoundEditorView: View {
                                 .disabled(entry.bid >= R || bidsLocked || isRoundComplete)
                             }
                         } else {
-                            // Disable editing tricks if round is complete
+                            // Updated trick editing HStack per instructions: only disable minus if tricks <= 0 or tricksLocked
                             HStack(spacing: 12) {
                                 Button {
                                     entry.tricks = max(0, entry.tricks - 1)
@@ -144,31 +156,31 @@ struct RoundEditorView: View {
                                         .font(.title3)
                                 }
                                 .buttonStyle(.plain)
-                                .disabled(entry.tricks <= 0 || isRoundComplete)
+                                .disabled(entry.tricks <= 0 || isTrickEditingLocked)
 
                                 Text("\(entry.tricks)")
                                     .monospacedDigit()
                                     .frame(minWidth: 36, alignment: .center)
 
-                                // Prevent total tricks exceeding R by capping based on other players' current tricks
-                                let usedTotal = round.entries.reduce(0) { $0 + $1.tricks }
-                                let otherUsed = usedTotal - entry.tricks
-                                let maxForThisPlayer = max(0, R - otherUsed)
+                                let otherAllocated = round.entries.filter { $0.id != entry.id }.reduce(0) { $0 + $1.tricks }
+                                let canIncrement = entry.tricks < R && (otherAllocated + entry.tricks) < R && !tricksLocked
 
                                 Button {
-                                    entry.tricks = min(maxForThisPlayer, entry.tricks + 1)
-                                    _ = vm.validateTricks(round: round)
+                                    if canIncrement {
+                                        entry.tricks += 1
+                                        _ = vm.validateTricks(round: round)
+                                    }
                                 } label: {
                                     Image(systemName: "plus.circle.fill")
                                         .font(.title3)
                                 }
                                 .buttonStyle(.plain)
-                                .disabled(entry.tricks >= maxForThisPlayer || isRoundComplete)
+                                .disabled(!canIncrement || isTrickEditingLocked)
                             }
                         }
                     }
                 }
-                if vm.phase == .bids {
+                if phase == .bids {
                     HStack {
                         Text("Total Bids Made")
                             .font(.subheadline)
@@ -180,14 +192,14 @@ struct RoundEditorView: View {
                     }
                     .accessibilityLabel("Total bids made")
                 }
-                if vm.phase == .bids, vm.totalBids == R, let msg = vm.bidMessage {
+                if phase == .bids, vm.totalBids == R, let msg = vm.bidMessage {
                     Text(msg)
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
             }
 
-            if vm.phase == .tricks {
+            if phase == .tricks {
                 Section("Tricks remaining") {
                     let used = round.entries.reduce(0) { $0 + $1.tricks }
                     Text("\(max(0, R - used))")
@@ -218,6 +230,11 @@ struct RoundEditorView: View {
             _ = vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
             _ = vm.validateTricks(round: round)
             vm.updateTotalBids(from: round)
+            if isRoundComplete {
+                phase = .tricks
+            } else {
+                phase = .bids
+            }
         }
         // Removed toolbar Done button as per instructions
         // MARK: - Sheet for bid lock confirmation (replacing confirmationDialog)
@@ -247,7 +264,7 @@ struct RoundEditorView: View {
                     Button("Proceed") {
                         // Lock bids and advance to tricks phase, then dismiss sheet
                         bidsLocked = true
-                        vm.phase = .tricks
+                        phase = .tricks
                         showBidLockConfirmation = false
                     }
                     .foregroundColor(.red)
