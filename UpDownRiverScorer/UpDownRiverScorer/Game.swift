@@ -76,14 +76,13 @@ final class Game {
         }
         // Early back-down: compute from the current context
         // Determine the last played round's cardsPerPlayer, or assume 1 if none
-        let sorted = rounds.sorted { $0.index < $1.index }
-        let lastCards = sorted.last?.cardsPerPlayer ?? 1
+        let lastCards = roundsSorted.last?.cardsPerPlayer ?? 1
         // If already at 1, stay at 1
         if lastCards <= 1 { return 1 }
         // Build a descending sequence from lastCards-1 to 1
         let down = Array(stride(from: lastCards - 1, through: 1, by: -1))
         // Index relative to when early back-down starts: the first call after setting the flag should return lastCards-1
-        let relative = index - (sorted.last?.index ?? -1) - 1
+        let relative = index - (roundsSorted.last?.index ?? -1) - 1
         if relative >= 0 && relative < down.count {
             return down[relative]
         } else {
@@ -98,8 +97,7 @@ final class Game {
             return Rules.roundSequence(maxCards: maxCards).count
         }
         // When started back down early, determine how many more rounds remain from the current lastCards down to 1
-        let sorted = rounds.sorted { $0.index < $1.index }
-        guard let last = sorted.last else {
+        guard let last = roundsSorted.last else {
             // No rounds yet; fall back to standard sequence
             return Rules.roundSequence(maxCards: maxCards).count
         }
@@ -114,7 +112,7 @@ final class Game {
     @Transient
     var isCurrentlyHeadingUp: Bool {
         // No rounds yet -> heading up
-        guard let last = rounds.sorted(by: { $0.index < $1.index }).last else { return true }
+        guard let last = roundsSorted.last else { return true }
         return last.cardsPerPlayer < maxCards
     }
 
