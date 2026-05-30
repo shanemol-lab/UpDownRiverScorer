@@ -274,32 +274,7 @@ struct GameDetailView: View {
     
     private func currentRoundCompletionMessage() -> String? {
         guard let round = currentRound else { return nil }
-        let R = round.cardsPerPlayer
-        guard let dealerId = round.dealer?.id else { return "Missing dealer for this round." }
-
-        // Build bids and tricks maps
-        var bids: [UUID: Int] = [:]
-        var tricks: [UUID: Int] = [:]
-        for e in round.entries {
-            if let pid = e.player?.id {
-                bids[pid] = e.bid
-                tricks[pid] = e.tricks
-            }
-        }
-
-        // Validate bids
-        let bidResult = Rules.validateBids(cardsPerPlayer: R, dealerPlayerId: dealerId, bidsByPlayerId: bids, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
-        if !bidResult.isValid {
-            return bidResult.message ?? "Bids are invalid."
-        }
-
-        // Validate tricks
-        let trickResult = Rules.validateTricks(cardsPerPlayer: R, tricksByPlayerId: tricks)
-        if !trickResult.isValid {
-            return trickResult.message ?? "Tricks are invalid."
-        }
-
-        return nil // all good
+        return RoundValidator.validate(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
     }
 }
 
