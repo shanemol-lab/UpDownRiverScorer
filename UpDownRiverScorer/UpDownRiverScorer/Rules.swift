@@ -57,6 +57,11 @@ enum Rules {
         bidsByPlayerId: [UUID: Int],
         enforceDealerForbidden: Bool = true
     ) -> BidValidationResult {
+        // Require at least one bid entry — an empty dict has no bids to validate
+        guard !bidsByPlayerId.isEmpty else {
+            return .init(isValid: false, forbiddenDealerBid: nil, message: "No bids have been entered.")
+        }
+
         // Range checks
         for (_, bid) in bidsByPlayerId {
             if bid < 0 || bid > R {

@@ -199,6 +199,13 @@ struct HowToPlayView: View {
                     Divider()
 
                     SectionBlock(title: "Configurable Variants (set at game start)") {
+                        Subsection(title: "Reserve Trump Card") {
+                            Bullet("On (default) or Off.")
+                            Bullet("When on, one card from the deck is reserved face-up to determine the trump suit. This reduces the maximum hand size by 1 (51 usable cards instead of 52).")
+
+                            Example("", content: "With 4 players and Reserve Trump Card on: 51 ÷ 4 = 12 cards maximum. With it off: 52 ÷ 4 = 13 cards maximum.")
+                        }
+
                         Subsection(title: "Dealer Forbidden Bid") {
                             Bullet("On (default) or Off.")
                             Bullet("When on, the Dealer may not bid a number that makes total bids equal available tricks.")
@@ -206,9 +213,9 @@ struct HowToPlayView: View {
 
                         Subsection(title: "Maximum Hand Size") {
                             Bullet("Fixed maximum: hands increase from 1 card up to the chosen maximum, then decrease back to 1.")
-                            Bullet("Based on player count (default): Maximum hand size = 51 ÷ number of players). One card is always reserved to determine trump.")
+                            Bullet("Based on player count (default): maximum hand size is determined by deck size divided by number of players.")
 
-                            Example("", content: "With 4 players: 51 ÷ 4 = 12.75, so the maximum hand size is 12 cards.")
+                            Example("", content: "With 4 players and Reserve Trump Card on: 51 ÷ 4 = 12 cards maximum.")
                         }
                     }
                     .id("ConfigurableVariants")

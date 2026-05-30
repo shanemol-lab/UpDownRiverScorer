@@ -24,9 +24,7 @@ struct GameListView: View {
                     }
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) {
-                            if let index = games.firstIndex(where: { $0.id == game.id }) {
-                                delete(offsets: IndexSet(integer: index))
-                            }
+                            modelContext.delete(game)
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
