@@ -14,11 +14,6 @@ final class RoundEditorViewModel: ObservableObject {
     let titleLeadingPadding: CGFloat = 12
     let doneTrailingPadding: CGFloat = 12
 
-    enum Phase: String, CaseIterable {
-        case bids = "Bids"
-        case tricks = "Tricks"
-    }
-
     @Published var bidMessage: String?
     @Published var trickMessage: String?
 

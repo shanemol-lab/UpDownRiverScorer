@@ -23,7 +23,12 @@ struct RoundEditorView: View {
     // New state variable for tricks locking state
     @State private var tricksLocked = false
 
-    @State private var phase: RoundEditorViewModel.Phase = .bids
+    private enum Phase: String, CaseIterable {
+        case bids = "Bids"
+        case tricks = "Tricks"
+    }
+
+    @State private var phase: Phase = .bids
 
     private var R: Int { round.cardsPerPlayer }
     
@@ -55,7 +60,7 @@ struct RoundEditorView: View {
             }
 
             Picker("Phase", selection: $phase) {
-                ForEach(RoundEditorViewModel.Phase.allCases, id: \.self) { p in
+                ForEach(Phase.allCases, id: \.self) { p in
                     Text(p.rawValue).tag(p)
                 }
             }

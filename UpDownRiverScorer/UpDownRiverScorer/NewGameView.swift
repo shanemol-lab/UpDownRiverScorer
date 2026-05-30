@@ -215,7 +215,7 @@ struct NewGameView: View {
             }
             .onChange(of: vm.maximumHandSizeEnabled) { oldValue, enabled in
                 if enabled && vm.maximumHandSize == nil {
-                    maxHandSizeValue = 1
+                    maxHandSizeValue = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
                     showMaxHandSizeSheet = true
                 }
             }

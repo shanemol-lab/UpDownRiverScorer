@@ -101,6 +101,9 @@ enum Rules {
     }
 
     static func validateTricks(cardsPerPlayer R: Int, tricksByPlayerId: [UUID: Int]) -> (isValid: Bool, message: String?) {
+        guard !tricksByPlayerId.isEmpty else {
+            return (false, "No tricks have been entered.")
+        }
         for (_, t) in tricksByPlayerId {
             if t < 0 || t > R {
                 return (false, "Tricks must be between 0 and \(R).")
