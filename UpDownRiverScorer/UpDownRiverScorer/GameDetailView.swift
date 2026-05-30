@@ -249,6 +249,7 @@ struct GameDetailView: View {
     @discardableResult private func addNextRound() -> Round? {
         let nextIndex = (game.roundsSorted.last?.index ?? -1) + 1
         guard nextIndex < game.totalRounds else { return nil }
+        guard !game.rounds.contains(where: { $0.index == nextIndex }) else { return nil }
 
         let dealer = game.dealer(forRoundIndex: nextIndex)
         let R = game.cardsPerPlayer(forRoundIndex: nextIndex)

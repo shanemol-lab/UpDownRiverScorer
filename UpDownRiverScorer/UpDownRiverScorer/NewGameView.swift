@@ -13,8 +13,10 @@ struct NewGameView: View {
 
     var onGameCreated: (Game) -> Void = { _ in }
 
+    @AppStorage("hasSeenDealerHint") private var hasSeenDealerHint = false
+    @State private var showDealerInfo = false
+
     @StateObject private var vm = NewGameViewModel()
-    @State private var showDealerInfo = true
     @State private var showMaxHandSizeSheet = false
     @State private var maxHandSizeValue: Int = 1
     @State private var showVariantConfirmation = false
@@ -112,6 +114,9 @@ struct NewGameView: View {
             }
             .navigationTitle("New Game")
             .interactiveDismissDisabled(true)
+            .onAppear {
+                if !hasSeenDealerHint { showDealerInfo = true }
+            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
@@ -148,6 +153,7 @@ struct NewGameView: View {
                     Spacer()
 
                     Button {
+                        hasSeenDealerHint = true
                         showDealerInfo = false
                     } label: {
                         Text("Got it")
