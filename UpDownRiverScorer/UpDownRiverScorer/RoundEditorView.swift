@@ -159,7 +159,7 @@ struct RoundEditorView: View {
                                     .frame(minWidth: 36, alignment: .center)
 
                                 let otherAllocated = round.entries.filter { $0.id != entry.id }.reduce(0) { $0 + $1.tricks }
-                                let canIncrement = entry.tricks < R && (otherAllocated + entry.tricks) < R && !tricksLocked
+                                let canIncrement = entry.tricks < R && (otherAllocated + entry.tricks) < R && !isTrickEditingLocked
 
                                 Button {
                                     if canIncrement {
