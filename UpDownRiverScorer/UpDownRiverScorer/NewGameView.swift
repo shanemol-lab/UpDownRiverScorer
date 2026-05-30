@@ -225,17 +225,7 @@ struct NewGameView: View {
                     showMaxHandSizeSheet = true
                 }
             }
-            .onChange(of: vm.playerCount) { oldValue, newValue in
-                // If a maximum is selected and becomes invalid due to fewer players, force re-selection
-                if vm.maximumHandSizeEnabled {
-                    let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
-                    if let m = vm.maximumHandSize, m > allowed {
-                        // Force user to change the maximum
-                        maxHandSizeValue = allowed
-                        showMaxHandSizeSheet = true
-                    }
-                }
-            }
+
             .sheet(isPresented: $showVariantConfirmation) {
                 VStack(alignment: .leading, spacing: 20) {
                     Text("Confirm Variants")
