@@ -167,13 +167,7 @@ struct GameDetailView: View {
                                     showRoundIncompleteAlert = true
                                 } else {
                                     if let newRound = addNextRound() {
-                                        // Scroll to the new round first, then navigate
-                                        DispatchQueue.main.async {
-                                            proxy.scrollTo(newRound.id, anchor: .center)
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                                navigateToRound = newRound
-                                            }
-                                        }
+                                        navigateToRound = newRound
                                     }
                                 }
                             }
@@ -234,20 +228,15 @@ struct GameDetailView: View {
                 .disabled(!game.isCurrentlyHeadingUp)
                 Button("Cancel", role: .cancel) {}
             }
-            .onAppear {
-                // Ensure we scroll to the very top after the list lays out so the title is visible
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        proxy.scrollTo("top", anchor: .top)
-                    }
+            .task {
+                try? await Task.sleep(for: .milliseconds(50))
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    proxy.scrollTo("top", anchor: .top)
                 }
-            }
-            .onAppear {
                 if game.showFirstVisitHint {
                     game.showFirstVisitHint = false
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                        showFirstVisitHint = true
-                    }
+                    try? await Task.sleep(for: .milliseconds(150))
+                    showFirstVisitHint = true
                 }
             }
             .alert("Welcome", isPresented: $showFirstVisitHint) {
