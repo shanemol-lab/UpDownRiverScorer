@@ -39,6 +39,11 @@ final class Game {
         players.sorted { $0.sortIndex < $1.sortIndex }
     }
 
+    /// Rounds in ascending index order — use this instead of `rounds` wherever order matters.
+    var roundsSorted: [Round] {
+        rounds.sorted { $0.index < $1.index }
+    }
+
     init(players: [Player], reserveTrumpCard: Bool = true, dealerForbiddenBidEnabled: Bool = true, customMaxCards: Int? = nil) {
         self.id = UUID()
         self.createdAt = Date()
@@ -119,7 +124,7 @@ final class Game {
         if manualCompletionDate != nil {
             return true
         }
-        guard let lastRound = rounds.last else { return false }
+        guard let lastRound = roundsSorted.last else { return false }
         return lastRound.isValid(enforceDealerForbidden: dealerForbiddenBidEnabled) && rounds.count >= totalRounds
     }
     /// Returns the completion date, either manual or inferred from the last round's creation date
@@ -128,7 +133,7 @@ final class Game {
         if let manualDate = manualCompletionDate {
             return manualDate
         }
-        return rounds.last?.createdAt
+        return roundsSorted.last?.createdAt
     }
 }
 
