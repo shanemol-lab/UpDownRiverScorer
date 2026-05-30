@@ -75,19 +75,7 @@ struct RoundEditorView: View {
                     }
                     if phase == .bids {
                         let bidsOK = vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
-                        if game.dealerForbiddenBidEnabled {
-                            if vm.totalBids == R {
-                                let dealerId = round.dealer?.id
-                                let nonDealerSum = round.entries.filter { $0.player?.id != dealerId }.reduce(0) { $0 + $1.bid }
-                                let forbidden = R - nonDealerSum
-                                if let dealerBid = round.entries.first(where: { $0.player?.id == dealerId })?.bid {
-                                    vm.bidMessage = "Total bids equal total cards (\(R)). Dealer cannot bid \(forbidden). Dealer currently bid \(dealerBid). Adjust bids before continuing."
-                                } else {
-                                    vm.bidMessage = "Total bids equal total cards (\(R)). Dealer cannot bid \(forbidden). Adjust bids before continuing."
-                                }
-                            }
-                        }
-                        if bidsOK && (game.dealerForbiddenBidEnabled ? vm.totalBids != R : true) {
+                        if bidsOK {
                             if !bidsLocked && !game.suppressBidLockConfirmation {
                                 showBidLockConfirmation = true
                                 return
