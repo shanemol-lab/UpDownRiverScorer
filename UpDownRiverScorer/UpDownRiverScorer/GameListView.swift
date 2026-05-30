@@ -81,17 +81,14 @@ struct GameListView: View {
             }
         }
         .sheet(isPresented: $showingNewGame) {
-            NewGameView()
+            NewGameView { game in
+                createdGameForFullScreen = game
+                showGameFullScreen = true
+            }
         }
         .onChange(of: showingNewGame) { oldValue, isPresented in
             if oldValue == true && isPresented == false {
                 pendingGameId = nil
-            }
-        }
-        .onReceive(NotificationCenter.default.publisher(for: Notification.Name("PresentGameFullScreen"))) { output in
-            if let game = output.object as? Game {
-                createdGameForFullScreen = game
-                showGameFullScreen = true
             }
         }
         .fullScreenCover(isPresented: $showGameFullScreen) {

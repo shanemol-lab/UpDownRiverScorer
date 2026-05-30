@@ -11,6 +11,8 @@ struct NewGameView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
 
+    var onGameCreated: (Game) -> Void = { _ in }
+
     @StateObject private var vm = NewGameViewModel()
     @State private var showDealerInfo = true
     @State private var showMaxHandSizeSheet = false
@@ -271,10 +273,8 @@ struct NewGameView: View {
         }
         let game = vm.createGame(modelContext: modelContext)
         ensureCurrentRoundExists(game: game, modelContext: modelContext)
-        // Notify parent to present the game full-screen
-        NotificationCenter.default.post(name: Notification.Name("PresentGameFullScreen"), object: game)
-        // Dismiss this sheet
         dismiss()
+        onGameCreated(game)
     }
 
     private func ensureCurrentRoundExists(game: Game, modelContext: ModelContext) {
