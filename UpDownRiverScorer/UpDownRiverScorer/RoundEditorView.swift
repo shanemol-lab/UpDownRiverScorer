@@ -36,6 +36,12 @@ struct RoundEditorView: View {
     // Updated computed property per instructions
     private var isTrickEditingLocked: Bool { isActiveRound ? tricksLocked : true }
 
+    /// Derived from already-published vm.bidMessage — avoids calling validateBids (which has
+    /// side effects) inside a view modifier during layout.
+    private var isBidsDoneButtonDisabled: Bool {
+        bidsLocked || isRoundComplete || vm.bidMessage != nil
+    }
+
     private var sortedEntries: [RoundEntry] {
         round.entries.sorted { ($0.player?.sortIndex ?? 0) < ($1.player?.sortIndex ?? 0) }
     }
@@ -103,10 +109,7 @@ struct RoundEditorView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .padding(.trailing, vm.doneTrailingPadding)
-                // Disable Done button if editing bids and total bids invalid or locked or round complete
-                .disabled(
-                    (phase == .bids && (bidsLocked || !vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled) || isRoundComplete))
-                )
+                .disabled(phase == .bids && isBidsDoneButtonDisabled)
             }
             .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
 
