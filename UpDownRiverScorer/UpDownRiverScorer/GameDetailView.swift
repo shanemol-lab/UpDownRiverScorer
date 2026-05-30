@@ -255,6 +255,7 @@ struct GameDetailView: View {
 
         game.rounds.append(round)
         modelContext.insert(round)
+        round.entries.forEach { modelContext.insert($0) }
         return round
     }
     

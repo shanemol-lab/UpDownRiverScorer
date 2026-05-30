@@ -290,6 +290,7 @@ struct NewGameView: View {
             let round = Round(index: idx, cardsPerPlayer: R, dealer: dealer, players: game.orderedPlayers)
             game.rounds.append(round)
             modelContext.insert(round)
+            round.entries.forEach { modelContext.insert($0) }
         }
     }
 }
