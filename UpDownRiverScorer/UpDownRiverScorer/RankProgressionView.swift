@@ -20,14 +20,7 @@ struct RankProgressionView: View {
     }
 
     private var completedRounds: [Round] {
-        game.rounds
-            .sorted { $0.index < $1.index }
-            .filter { round in
-                let R = round.cardsPerPlayer
-                let tricks = round.entries.map { $0.tricks }
-                let sum = tricks.reduce(0, +)
-                return tricks.count == game.playerCount && tricks.allSatisfy { $0 >= 0 && $0 <= R } && sum == R
-            }
+        game.roundsSorted.filter { $0.isValid(enforceDealerForbidden: game.dealerForbiddenBidEnabled) }
     }
 
     private var dataPoints: [Point] {
