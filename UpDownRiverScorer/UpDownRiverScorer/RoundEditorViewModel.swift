@@ -15,6 +15,7 @@ final class RoundEditorViewModel: ObservableObject {
     let doneTrailingPadding: CGFloat = 12
 
     @Published var bidMessage: String?
+    @Published var forbiddenBidHint: String?
     @Published var trickMessage: String?
 
     @Published var totalBids: Int = 0
@@ -39,6 +40,7 @@ final class RoundEditorViewModel: ObservableObject {
 
         let result = Rules.validateBids(cardsPerPlayer: R, dealerPlayerId: dealerId, bidsByPlayerId: bids, enforceDealerForbidden: enforceDealerForbidden)
         bidMessage = result.message
+        forbiddenBidHint = result.forbiddenDealerBid != nil ? result.message : nil
         updateTotalBids(from: round)
         return result.isValid
     }
