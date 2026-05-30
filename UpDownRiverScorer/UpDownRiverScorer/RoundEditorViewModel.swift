@@ -24,7 +24,6 @@ final class RoundEditorViewModel: ObservableObject {
         case tricks = "Tricks"
     }
 
-    @Published var phase: Phase = .bids
     @Published var bidMessage: String?
     @Published var trickMessage: String?
 
