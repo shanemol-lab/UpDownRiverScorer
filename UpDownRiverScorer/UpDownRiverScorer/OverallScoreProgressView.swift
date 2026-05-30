@@ -29,27 +29,17 @@ struct OverallScoreProgressView: View {
 
     private var chartSeries: [PlayerSeries] {
         let players = orderedPlayers
-        var totalsByPlayer: [UUID: Int] = Dictionary(uniqueKeysWithValues: players.map { ($0.id, 0) })
         var seriesForPlayer: [UUID: [Point]] = Dictionary(uniqueKeysWithValues: players.map { ($0.id, []) })
 
-        for round in completedRounds { // already sorted by index
-            // update totals from this round
-            for entry in round.entries {
-                guard let p = entry.player else { continue }
-                let delta = Rules.score(bid: entry.bid, tricks: entry.tricks)
-                totalsByPlayer[p.id, default: 0] += delta
-            }
-            // emit a point for each player after this round
+        for (round, totals) in ScoringEngine.cumulativeTotalsPerRound(game: game) {
             for p in players {
-                let total = totalsByPlayer[p.id, default: 0]
-                let point = Point(player: p, roundIndex: round.index + 1, total: total)
+                let point = Point(player: p, roundIndex: round.index + 1, total: totals[p.id, default: 0])
                 seriesForPlayer[p.id, default: []].append(point)
             }
         }
 
         return players.map { p in
-            let pts = (seriesForPlayer[p.id] ?? []).sorted { $0.roundIndex < $1.roundIndex }
-            return PlayerSeries(id: p.id, color: game.color(for: p), points: pts)
+            PlayerSeries(id: p.id, color: game.color(for: p), points: seriesForPlayer[p.id] ?? [])
         }
         .filter { !$0.points.isEmpty }
     }

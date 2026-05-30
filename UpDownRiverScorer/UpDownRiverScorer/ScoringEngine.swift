@@ -14,15 +14,28 @@ struct ScoringEngine {
         for p in game.players { totals[p.id] = 0 }
 
         for round in game.roundsSorted {
-            // Use the same validity gate as the UI so scored rounds are consistent
-            // with rounds shown as complete.
             guard round.isValid(enforceDealerForbidden: game.dealerForbiddenBidEnabled) else { continue }
-
             for entry in round.entries {
                 guard let pid = entry.player?.id else { continue }
                 totals[pid, default: 0] += Rules.score(bid: entry.bid, tricks: entry.tricks)
             }
         }
         return totals
+    }
+
+    /// Returns cumulative totals per player after each completed round, in round order.
+    /// Used by chart views to build progressive score and rank series without
+    /// duplicating the scoring accumulation logic.
+    static func cumulativeTotalsPerRound(game: Game) -> [(round: Round, totals: [UUID: Int])] {
+        var running: [UUID: Int] = Dictionary(uniqueKeysWithValues: game.players.map { ($0.id, 0) })
+        var result: [(round: Round, totals: [UUID: Int])] = []
+        for round in game.roundsSorted where round.isValid(enforceDealerForbidden: game.dealerForbiddenBidEnabled) {
+            for entry in round.entries {
+                guard let pid = entry.player?.id else { continue }
+                running[pid, default: 0] += Rules.score(bid: entry.bid, tricks: entry.tricks)
+            }
+            result.append((round: round, totals: running))
+        }
+        return result
     }
 }

@@ -24,25 +24,18 @@ struct RankProgressionView: View {
     }
 
     private var dataPoints: [Point] {
-        // For each round up to completed, compute cumulative totals per player, then rank with ties allowed
         let players = game.orderedPlayers
-        var totalsByPlayer: [UUID: Int] = Dictionary(uniqueKeysWithValues: players.map { ($0.id, 0) })
         var points: [Point] = []
 
-        for round in completedRounds { // already sorted
-            // update totals
-            for entry in round.entries {
-                guard let p = entry.player else { continue }
-                totalsByPlayer[p.id, default: 0] += Rules.score(bid: entry.bid, tricks: entry.tricks)
-            }
-            // sort by total desc, ties allowed -> same rank for equal totals
-            let sorted = players.sorted { totalsByPlayer[$0.id, default: 0] > totalsByPlayer[$1.id, default: 0] }
+        for (round, totals) in ScoringEngine.cumulativeTotalsPerRound(game: game) {
+            // Sort by total desc, assign ranks with ties allowed
+            let sorted = players.sorted { totals[$0.id, default: 0] > totals[$1.id, default: 0] }
             var rankByPlayer: [UUID: Int] = [:]
             var currentRank = 0
             var lastScore: Int? = nil
             for (idx, p) in sorted.enumerated() {
-                let score = totalsByPlayer[p.id, default: 0]
-                if let ls = lastScore, ls == score {
+                let score = totals[p.id, default: 0]
+                if lastScore == score {
                     // same rank as previous
                 } else {
                     currentRank = idx + 1
@@ -50,7 +43,6 @@ struct RankProgressionView: View {
                 }
                 rankByPlayer[p.id] = currentRank
             }
-            // emit points for this round index
             for p in players {
                 if let r = rankByPlayer[p.id] {
                     points.append(Point(player: p, roundIndex: round.index, rank: r))
