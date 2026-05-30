@@ -28,7 +28,7 @@ struct RoundEditorView: View {
     private var R: Int { round.cardsPerPlayer }
     
     // Computed property to detect if the round is complete (all tricks allocated and round marked as done)
-    private var isRoundComplete: Bool { round.isValid }
+    private var isRoundComplete: Bool { round.isValid(enforceDealerForbidden: game.dealerForbiddenBidEnabled) }
     
     // Added computed property per instructions
     private var isActiveRound: Bool { game.rounds.last?.id == round.id }
@@ -63,7 +63,7 @@ struct RoundEditorView: View {
                 Spacer()
                 Button("Done") {
                     // Same logic as toolbar Done button
-                    if round.isValid {
+                    if round.isValid(enforceDealerForbidden: game.dealerForbiddenBidEnabled) {
                         dismiss()
                         return
                     }

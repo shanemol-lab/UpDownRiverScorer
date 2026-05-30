@@ -2,11 +2,10 @@ import Foundation
 
 enum RoundValidator {
     // Returns nil when round is valid; otherwise a user-friendly message.
-    static func validate(round: Round) -> String? {
+    static func validate(round: Round, enforceDealerForbidden: Bool) -> String? {
         let R = round.cardsPerPlayer
         guard let dealerId = round.dealer?.id else { return "Missing dealer for this round." }
 
-        // Build bids and tricks maps
         var bids: [UUID: Int] = [:]
         var tricks: [UUID: Int] = [:]
         for e in round.entries {
@@ -16,19 +15,17 @@ enum RoundValidator {
             }
         }
 
-        // Validate bids
-        let bidResult = Rules.validateBids(cardsPerPlayer: R, dealerPlayerId: dealerId, bidsByPlayerId: bids, enforceDealerForbidden: true)
+        let bidResult = Rules.validateBids(cardsPerPlayer: R, dealerPlayerId: dealerId, bidsByPlayerId: bids, enforceDealerForbidden: enforceDealerForbidden)
         if !bidResult.isValid {
             return bidResult.message ?? "Bids are invalid."
         }
 
-        // Validate tricks
         let trickResult = Rules.validateTricks(cardsPerPlayer: R, tricksByPlayerId: tricks)
         if !trickResult.isValid {
             return trickResult.message ?? "Tricks are invalid."
         }
 
-        return nil // all good
+        return nil
     }
 }
 

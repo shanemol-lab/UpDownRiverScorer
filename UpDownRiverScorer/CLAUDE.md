@@ -1,5 +1,158 @@
 # CLAUDE.md — UpDownRiverScorer (Bugger It Scorer)
 
+---
+
+## PROJECT CONTEXT
+
+- **Stack:** Swift / SwiftUI / SwiftData / Charts — iOS 17+, no third-party dependencies
+- **Entry point:** UpDownRiverScorerApp.swift (ModelContainer schema: Game, Player, Round, RoundEntry)
+- **Test command:** Cmd+U in Xcode (Swift Testing framework, not XCTest — test targets: UpDownRiverScorerTests, UpDownRiverScorerUITests)
+- **Key conventions:** MVVM; one public type per file; extensions in separate files (e.g. Game+Colors.swift); ViewModels are @MainActor ObservableObject; models use @Transient for non-persistent computed properties; guard for optionals, precondition for invariants; no comments unless behaviour is non-obvious; all business logic is stateless (Rules enum, ScoringEngine, RoundValidator — no singletons)
+- **Do not modify:** Rules.swift scoring constants (50 + 10×tricks for correct bid, 10 for correct zero bid, −10×diff for incorrect) — these encode the agreed house rules
+- **CI/CD:** None configured — local Xcode builds only
+
+---
+
+## THE CORE LOOP
+Claude MUST follow this loop at all times and MUST NOT skip steps.
+
+### 1. Plan
+- Clarify intent before doing anything
+- Propose the smallest useful next step
+- Prefer vertical slices over phases
+- Produce a concise, numbered plan with a concrete verification step
+- **Do NOT implement unless explicitly told to**
+- Bash commands that do not create, update, or delete are always allowed in plan phase
+- If a plan exceeds ~5 steps, pause and re-scope
+
+### 2. Review
+- Wait for explicit approval before implementing
+- Accept scope corrections without resistance
+- Bash commands that do not create, update, or delete are always allowed in review phase
+
+### 3. Execute
+- Run real commands, write real files
+- Prefer deterministic behaviour over cleverness
+- Bash commands that do not create, update, or delete are always allowed in execute phase
+
+### 4. Verify
+- Prove the change worked (commands, outputs, tests)
+- Surface failures explicitly
+- Create document: `TEST-RESULTS-[step]-[description]`
+- Bash commands that do not create, update, or delete are always allowed in verify phase
+
+> Plans are disposable. Working code is not.
+
+---
+
+## WORKFLOW ORCHESTRATION
+
+### 1. Plan Mode Default
+- Enter plan mode for ANY non-trivial task (3+ steps or architectural decisions)
+- If something goes sideways, STOP and re-plan immediately — don't keep pushing
+- Use plan mode for verification steps, not just building
+- Write detailed specs upfront to reduce ambiguity
+
+### 2. Subagent Strategy
+- Use subagents liberally to keep the main context window clean
+- Offload research, exploration, and parallel analysis to subagents
+- For complex problems, throw more compute at it via subagents
+- One task per subagent for focused execution
+
+### 3. Self-Improvement Loop
+- After ANY correction from the user: update `tasks/lessons.md` with the pattern
+- Write rules for yourself that prevent the same mistake
+- Ruthlessly iterate on these lessons until mistake rate drops
+- Review lessons at session start for the relevant project
+
+### 4. Verification Before Done
+- Never mark a task complete without proving it works
+- Diff behaviour between main and your changes when relevant
+- Ask yourself: "Would a staff engineer approve this?"
+- Run tests, check logs, demonstrate correctness
+
+### 5. Demand Elegance (Balanced)
+- For non-trivial changes: pause and ask "is there a more elegant way?"
+- If a fix feels hacky: "Knowing everything I know now, implement the elegant solution"
+- Skip this for simple, obvious fixes — don't over-engineer
+- Challenge your own work before presenting it
+
+### 6. Autonomous Bug Fixing
+- When given a bug report: just fix it. Don't ask for hand-holding
+- Point at logs, errors, failing tests — then resolve them
+- Zero context switching required from the user
+- Go fix failing CI tests without being told how
+
+---
+
+## TASK MANAGEMENT
+
+1. **Plan First** — Write plan to `tasks/todo.md` with checkable items
+2. **Verify Plan** — Check in before starting implementation
+3. **Track Progress** — Mark items complete as you go
+4. **Explain Changes** — High-level summary at each step
+5. **Document Results** — Add review section to `tasks/todo.md`
+6. **Capture Lessons** — Update `tasks/lessons.md` after any corrections
+
+---
+
+## SCOPE DISCIPLINE (Critical)
+
+Claude MUST:
+- Default to the smallest possible working change
+- Avoid speculative features
+- Avoid multi-phase execution without earning it
+- Ask before expanding scope
+
+If a plan exceeds ~5 steps, Claude should **pause and re-scope**.
+
+---
+
+## CODE DISCIPLINE (Critical)
+
+- Never hardcode values — always use variables
+- Change only what's necessary; don't touch unrelated code or comments
+- Don't "improve" things that aren't broken
+- Minimise side effects and churn
+- Prefer 100 lines over 1000
+- Clean up dead code and cruft
+- Ask: "Is there a simpler way?"
+
+---
+
+## CORE PRINCIPLES
+
+- **Simplicity First** — Make every change as simple as possible. Impact minimal code. Nothing speculative.
+- **No Laziness** — Find root causes. No temporary fixes. Senior developer standards.
+- **Minimal Impact** — Changes should only touch what's necessary. Avoid introducing bugs.
+- **Surgical Edits Only** — Don't touch unrelated code, comments, or structure.
+- **Goal-Driven** — Give clear success criteria. Write tests first, then make them pass.
+
+---
+
+## ENGINEER MINDSET
+
+- **Tenacity** — Agents never get tired. Relentless iteration beats giving up. Stamina is a force multiplier.
+- **Leverage** — Imperative → Declarative. Give success criteria and watch it go. Multiply your leverage.
+- **Fun** — Remove drudgery, focus on creativity. More courage, less blocking.
+- **Fight Atrophy** — Writing and reading code are different. Stay sharp intentionally.
+- **Speedups ≠ Just Faster** — Do more, not just faster. Expand what you can build, not just how quickly.
+- **Avoid Slopacolypse** — Brace for AI slop. Hype will be loud. Signal requires judgment.
+
+---
+
+## KNOWN ISSUES / TECH DEBT
+
+- `Round.isValid` and `RoundValidator` hardcode `enforceDealerForbidden: true` — they do not read the game's `dealerForbiddenBidEnabled` setting. Fix before adding new validation logic.
+- `Game.isGameCompleted` and `gameCompletionDate` use unsorted `rounds.last` — non-deterministic. Should use sorted rounds.
+- `GameDetailView.currentRoundCompletionMessage()` duplicates `RoundValidator.validate()` — consolidate before modifying either.
+- `RoundEditorViewModel.phase` is never read by the view (view uses its own `@State var phase`) — dead published property.
+- `DispatchQueue.main.async` used inside `@MainActor` methods in `RoundEditorViewModel` — redundant; use direct assignment.
+- `NotificationCenter` used to pass a newly-created `Game` from `NewGameView` to `GameListView` (stringly-typed `"PresentGameFullScreen"`) — replace with a typed callback or `@Binding`.
+- `reserveTrumpCard` is hardcoded to `true` in `NewGameViewModel.createGame()` despite being an optional rule — either expose it as a toggle or remove it from `Game.init`'s public surface.
+
+---
+
 ## Project Overview
 
 iOS/iPadOS card game scoring app for the "Up/Down River" card game (displayed as "Bugger It Scorer"). Built entirely with native Apple frameworks — no third-party dependencies.
@@ -129,3 +282,7 @@ GameListView (NavigationStack root)
 - **Dealer forbidden bid**: Rule preventing dealer from bidding a value that makes total bids = R.
 - **Reserve trump card**: Rule that reduces max cards by 1 (one card "reserved" face-up as trump).
 - **Early back-down**: Variant that shortens the descending portion of the round sequence.
+
+---
+
+*Ship small. Ship often. Keep learning. // 2026*

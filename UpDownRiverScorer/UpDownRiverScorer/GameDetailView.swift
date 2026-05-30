@@ -35,7 +35,7 @@ struct GameDetailView: View {
     }
 
     private func validate(round: Round) -> String? {
-        return RoundValidator.validate(round: round)
+        return RoundValidator.validate(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
     }
     
     private struct PlayerTotalRow: View {
@@ -71,7 +71,7 @@ struct GameDetailView: View {
                 // Similar to the completed game tag style
                 HStack {
                     Spacer()
-                    if round.isValid {
+                    if round.isValid(enforceDealerForbidden: game.dealerForbiddenBidEnabled) {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundStyle(.green)
                     }

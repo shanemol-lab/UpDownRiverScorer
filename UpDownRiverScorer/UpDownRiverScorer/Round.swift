@@ -31,14 +31,13 @@ final class Round {
             .map { RoundEntry(player: $0) }
     }
 
-    /// Computed validity of the round based on current bids and tricks
-    @Transient
-    var isValid: Bool {
-        // Require a dealer
+    /// Returns true when bids and tricks are both valid for this round.
+    /// Pass the game's `dealerForbiddenBidEnabled` setting so the dealer-forbidden rule
+    /// is applied consistently with how the game was configured.
+    func isValid(enforceDealerForbidden: Bool) -> Bool {
         guard let dealerId = dealer?.id else { return false }
         let R = cardsPerPlayer
 
-        // Build maps of bids and tricks per player
         var bidsByPlayer: [UUID: Int] = [:]
         var tricksByPlayer: [UUID: Int] = [:]
         for e in entries {
@@ -48,8 +47,7 @@ final class Round {
             }
         }
 
-        // Validate using Rules (dealer forbidden bid is enforced by game settings elsewhere; default to true here)
-        let bidsOK = Rules.validateBids(cardsPerPlayer: R, dealerPlayerId: dealerId, bidsByPlayerId: bidsByPlayer, enforceDealerForbidden: true).isValid
+        let bidsOK = Rules.validateBids(cardsPerPlayer: R, dealerPlayerId: dealerId, bidsByPlayerId: bidsByPlayer, enforceDealerForbidden: enforceDealerForbidden).isValid
         let tricksOK = Rules.validateTricks(cardsPerPlayer: R, tricksByPlayerId: tricksByPlayer).isValid
         return bidsOK && tricksOK
     }
