@@ -10,7 +10,7 @@ import SwiftData
 
 @main
 struct UpDownRiverScorerApp: App {
-    var sharedModelContainer: ModelContainer = {
+    let sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Game.self,
             Player.self,

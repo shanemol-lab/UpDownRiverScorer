@@ -2,7 +2,7 @@ import SwiftUI
 
 extension Game {
     var playerColorPalette: [Color] {
-        [.red, .blue, .green, .orange, .purple, .pink, .teal, .brown, .black, .gray]
+        [.red, .blue, .green, .orange, .purple, .pink, .teal, .brown, .indigo, .mint]
     }
 
     func color(for player: Player) -> Color {

@@ -127,7 +127,7 @@ struct HowToPlayView: View {
                     SectionBlock(title: "Bidding Rules") {
                         Bullet("A bid is the number of tricks a player expects to win in that round.")
                         Bullet("Zero (0) bids are allowed.")
-                        Bullet("There is no upper limit on bids.")
+                        Bullet("Bids must be between 0 and the number of cards dealt that round.")
                         Bullet("Each player bids once per round.")
                         Bullet("The Dealer always bids last.")
 

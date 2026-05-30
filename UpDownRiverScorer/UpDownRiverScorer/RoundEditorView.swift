@@ -264,7 +264,7 @@ struct RoundEditorView: View {
                         phase = .tricks
                         showBidLockConfirmation = false
                     }
-                    .foregroundColor(.red)
+                    .foregroundStyle(.red)
                 }
                 .padding(.horizontal)
                 .padding(.bottom)
