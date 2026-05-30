@@ -188,7 +188,7 @@ struct RoundEditorView: View {
                     }
                     .accessibilityLabel("Total bids made")
                 }
-                if phase == .bids, vm.totalBids == R, let msg = vm.bidMessage {
+                if phase == .bids, let msg = vm.bidMessage {
                     Text(msg)
                         .font(.footnote)
                         .foregroundStyle(.secondary)
