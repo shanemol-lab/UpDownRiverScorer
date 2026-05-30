@@ -208,6 +208,7 @@ struct GameDetailView: View {
                     dismiss()
                 }
                 Button("Start back down") {
+                    guard !game.startedBackDown else { return }
                     // Record the stable pivot before setting the flag so cardsPerPlayer
                     // has a fixed reference point that won't shift as rounds are appended.
                     if let last = game.roundsSorted.last {

@@ -123,7 +123,8 @@ final class Game {
         if manualCompletionDate != nil {
             return true
         }
-        guard let lastRound = roundsSorted.last else { return false }
+        let sorted = roundsSorted
+        guard let lastRound = sorted.last else { return false }
         return lastRound.index == totalRounds - 1
             && lastRound.isValid(enforceDealerForbidden: dealerForbiddenBidEnabled)
     }
