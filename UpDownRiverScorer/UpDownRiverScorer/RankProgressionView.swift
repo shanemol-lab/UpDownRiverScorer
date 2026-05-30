@@ -80,7 +80,7 @@ struct RankProgressionView: View {
             )
             .symbol(Circle())
         }
-        .foregroundStyle(series.color)
+        .foregroundStyle(by: .value("Player", series.id.uuidString))
     }
 
     var body: some View {
@@ -127,6 +127,10 @@ struct RankProgressionView: View {
                 .chartYAxisLabel(position: .leading) { Text("Rank") }
                 .chartYScale(domain: 1...maxRank, type: .linear)
                 .chartXScale(domain: 1...(xUpperBound + 1))
+                .chartForegroundStyleScale(
+                    domain: chartSeries.map { $0.id.uuidString },
+                    range: chartSeries.map { $0.color }
+                )
                 .chartLegend(.hidden)
                 .frame(minHeight: 280)
                 .padding(.top, 4)

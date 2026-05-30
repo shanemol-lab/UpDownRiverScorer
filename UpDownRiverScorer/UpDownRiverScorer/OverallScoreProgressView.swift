@@ -69,9 +69,13 @@ struct OverallScoreProgressView: View {
                             )
                             .symbol(Circle())
                         }
-                        .foregroundStyle(series.color)
+                        .foregroundStyle(by: .value("Player", series.id.uuidString))
                     }
                 }
+                .chartForegroundStyleScale(
+                    domain: chartSeries.map { $0.id.uuidString },
+                    range: chartSeries.map { $0.color }
+                )
                 .chartXAxis {
                     AxisMarks(position: .bottom, values: Array(1...completedRounds.count)) { v in
                         AxisGridLine()
