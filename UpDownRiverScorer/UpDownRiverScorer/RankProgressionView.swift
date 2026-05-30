@@ -97,7 +97,7 @@ struct RankProgressionView: View {
                 .padding(.bottom, 4)
 
                 // +1 pads the right edge so the last data point isn't flush against the axis
-                let xUpperBound = max(1, completedRounds.count == 1 ? 2 : completedRounds.count)
+                let xUpperBound = max(1, completedRounds.count)
                 Chart {
                     // Filter series by selected player if any
                     ForEach(chartSeries.filter { filteredPlayer == nil || $0.id == filteredPlayer!.id }, id: \.id) { series in
