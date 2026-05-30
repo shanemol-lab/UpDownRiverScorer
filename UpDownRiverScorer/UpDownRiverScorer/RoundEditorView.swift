@@ -45,7 +45,7 @@ struct RoundEditorView: View {
     /// Derived from already-published vm.bidMessage — avoids calling validateBids (which has
     /// side effects) inside a view modifier during layout.
     private var isBidsDoneButtonDisabled: Bool {
-        bidsLocked || isRoundComplete || vm.bidMessage != nil
+        bidsLocked || isRoundComplete || !vm.bidsAreValid
     }
 
     private var sortedEntries: [RoundEntry] {
