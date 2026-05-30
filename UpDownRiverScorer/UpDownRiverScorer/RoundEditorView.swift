@@ -110,7 +110,14 @@ struct RoundEditorView: View {
                 ForEach(sortedEntries) { entry in
                     HStack {
                         let isDealer = entry.player?.id == round.dealer?.id
-                        Text("\(entry.player?.name ?? "Player")\(isDealer ? " (Dealer)" : "")")
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("\(entry.player?.name ?? "Player")\(isDealer ? " (Dealer)" : "")")
+                            if phase == .bids, isDealer, let hint = vm.forbiddenBidHint {
+                                Text(hint)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
                         Spacer()
                         if phase == .bids {
                             // Disable editing bids if round is complete or bids are locked
@@ -190,11 +197,6 @@ struct RoundEditorView: View {
                             .monospacedDigit()
                     }
                     .accessibilityLabel("Total bids made")
-                }
-                if phase == .bids, let msg = vm.forbiddenBidHint {
-                    Text(msg)
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
                 }
             }
 
