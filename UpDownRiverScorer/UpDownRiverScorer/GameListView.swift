@@ -11,6 +11,7 @@ struct GameListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Game.createdAt, order: .reverse) private var games: [Game]
     @State private var showingNewGame = false
+    @State private var showingHowToPlay = false
     @State private var path: [UUID] = []
     @State private var showGameFullScreen = false
     @State private var createdGameForFullScreen: Game? = nil
@@ -39,8 +40,8 @@ struct GameListView: View {
                     .accessibilityLabel("New game")
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        HowToPlayView()
+                    Button {
+                        showingHowToPlay = true
                     } label: {
                         Image(systemName: "book")
                     }
@@ -68,6 +69,9 @@ struct GameListView: View {
                 } else {
                     ContentUnavailableView("Loading Game", systemImage: "hourglass", description: Text("Please wait..."))
                 }
+            }
+            .navigationDestination(isPresented: $showingHowToPlay) {
+                HowToPlayView()
             }
         }
         .sheet(isPresented: $showingNewGame) {

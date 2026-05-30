@@ -18,7 +18,8 @@ struct RoundEditorView: View {
 
     // New state variables for bid locking confirmation and state
     @State private var showBidLockConfirmation = false
-    @State private var bidsLocked = false
+    // Start locked so isBidsDoneButtonDisabled is correct before onAppear fires
+    @State private var bidsLocked = true
 
     // New state variable for tricks locking state
     @State private var tricksLocked = false
@@ -226,6 +227,7 @@ struct RoundEditorView: View {
                 phase = .tricks
                 bidsLocked = true
             } else {
+                bidsLocked = false
                 _ = vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
                 _ = vm.validateTricks(round: round)
                 vm.updateTotalBids(from: round)

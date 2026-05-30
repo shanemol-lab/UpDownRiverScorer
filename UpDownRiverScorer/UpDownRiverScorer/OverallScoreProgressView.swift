@@ -57,6 +57,7 @@ struct OverallScoreProgressView: View {
                 .opacity(filteredPlayer == nil ? 0.5 : 1.0)
                 .padding(.bottom, 4)
 
+                // +1 pads the right edge so the last data point isn't flush against the axis
                 let xUpperBound = max(1, completedRounds.count == 1 ? 2 : completedRounds.count)
 
                 Chart {
