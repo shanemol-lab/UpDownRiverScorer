@@ -31,7 +31,7 @@ struct RoundEditorView: View {
     private var isRoundComplete: Bool { round.isValid(enforceDealerForbidden: game.dealerForbiddenBidEnabled) }
     
     // Added computed property per instructions
-    private var isActiveRound: Bool { game.rounds.last?.id == round.id }
+    private var isActiveRound: Bool { game.roundsSorted.last?.id == round.id }
     
     // Updated computed property per instructions
     private var isTrickEditingLocked: Bool { isActiveRound ? tricksLocked : true }
