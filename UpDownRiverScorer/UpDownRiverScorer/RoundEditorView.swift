@@ -142,6 +142,9 @@ struct RoundEditorView: View {
                                 .disabled(entry.bid >= R || bidsLocked || isRoundComplete)
                             }
                         } else {
+                            Text("Bid: \(entry.bid)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                             // Updated trick editing HStack per instructions: only disable minus if tricks <= 0 or tricksLocked
                             HStack(spacing: 12) {
                                 Button {
