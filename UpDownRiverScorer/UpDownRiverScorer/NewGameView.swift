@@ -20,11 +20,15 @@ struct NewGameView: View {
     @State private var showVariantConfirmation = false
     @State private var pendingStart = false
 
+    private var isReserveTrumpCardChanged: Bool { vm.reserveTrumpCard == false }
     private var isDealerBidChanged: Bool { vm.dealerForbiddenBidEnabled == false }
     private var isMaxHandSizeChanged: Bool { vm.maximumHandSizeEnabled == true }
 
     private var variantMessages: [String] {
         var messages: [String] = []
+        if isReserveTrumpCardChanged {
+            messages.append("Reserve Trump Card: Off")
+        }
         if isDealerBidChanged {
             messages.append("Dealer Forbidden Bid: Off")
         }
@@ -72,6 +76,9 @@ struct NewGameView: View {
                 }
 
                 Section("Rules") {
+                    Toggle(isOn: $vm.reserveTrumpCard) {
+                        Text("Reserve Trump Card")
+                    }
                     Toggle(isOn: $vm.dealerForbiddenBidEnabled) {
                         Text("Dealer Forbidden Bid")
                     }
@@ -112,7 +119,7 @@ struct NewGameView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Start") {
-                        if !isDealerBidChanged && !isMaxHandSizeChanged {
+                        if !isReserveTrumpCardChanged && !isDealerBidChanged && !isMaxHandSizeChanged {
                             startGame()
                         } else {
                             showVariantConfirmation = true

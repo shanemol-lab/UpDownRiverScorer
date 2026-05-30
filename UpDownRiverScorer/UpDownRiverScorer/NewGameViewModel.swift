@@ -14,6 +14,7 @@ final class NewGameViewModel: ObservableObject {
     @Published var playerCount: Int = 4
     @Published var names: [String] = Array(repeating: "", count: 4)
     // Rule toggles (defaults)
+    @Published var reserveTrumpCard: Bool = true
     @Published var dealerForbiddenBidEnabled: Bool = true
     @Published var maximumHandSizeEnabled: Bool = false
     @Published var maximumHandSize: Int? = nil
@@ -28,7 +29,7 @@ final class NewGameViewModel: ObservableObject {
         }
         // Clamp maximum hand size to allowed range when player count changes
         if maximumHandSizeEnabled {
-            let allowed = Rules.maxCards(playerCount: clamped, reserveTrumpCard: true)
+            let allowed = Rules.maxCards(playerCount: clamped, reserveTrumpCard: reserveTrumpCard)
             if let m = maximumHandSize {
                 maximumHandSize = min(max(1, m), allowed)
             }
@@ -40,9 +41,9 @@ final class NewGameViewModel: ObservableObject {
             Player(name: name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "Player \(idx+1)" : name,
                    sortIndex: idx)
         }
-        let allowedDefault = Rules.maxCards(playerCount: players.count, reserveTrumpCard: true)
+        let allowedDefault = Rules.maxCards(playerCount: players.count, reserveTrumpCard: reserveTrumpCard)
         let customMax = maximumHandSizeEnabled ? min(allowedDefault, max(1, maximumHandSize ?? allowedDefault)) : nil
-        let game = Game(players: players, reserveTrumpCard: true, dealerForbiddenBidEnabled: dealerForbiddenBidEnabled, customMaxCards: customMax)
+        let game = Game(players: players, reserveTrumpCard: reserveTrumpCard, dealerForbiddenBidEnabled: dealerForbiddenBidEnabled, customMaxCards: customMax)
         // Persist the game
         modelContext.insert(game)
         return game
