@@ -90,12 +90,11 @@ struct RoundEditorView: View {
                             }
                         }
                     } else {
-                        let bidsOK = vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
                         let tricksOK = vm.validateTricks(round: round)
-                        if bidsOK && tricksOK {
+                        if tricksOK {
                             tricksLocked = true
                             dismiss()
-                        } else if !tricksOK {
+                        } else {
                             showTricksIncompleteAlert = true
                         }
                     }
@@ -223,13 +222,13 @@ struct RoundEditorView: View {
         }
         .navigationTitle("Round \(round.index + 1)")
         .onAppear {
-            _ = vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
-            _ = vm.validateTricks(round: round)
-            vm.updateTotalBids(from: round)
             if isRoundComplete {
                 phase = .tricks
                 bidsLocked = true
             } else {
+                _ = vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
+                _ = vm.validateTricks(round: round)
+                vm.updateTotalBids(from: round)
                 phase = .bids
             }
         }
