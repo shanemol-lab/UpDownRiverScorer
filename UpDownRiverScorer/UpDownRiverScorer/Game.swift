@@ -91,6 +91,7 @@ final class Game {
         if relative >= 0 && relative < down.count {
             return down[relative]
         }
+        assertionFailure("cardsPerPlayer(forRoundIndex:) out-of-bounds: index \(index), pivotIndex \(pivotIndex), pivotCards \(pivotCards)")
         return 1
     }
 
