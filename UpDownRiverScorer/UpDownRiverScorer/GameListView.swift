@@ -67,7 +67,7 @@ struct GameListView: View {
                 if let game = games.first(where: { $0.id == gameId }) {
                     GameDetailView(game: game)
                 } else {
-                    ContentUnavailableView("Loading Game", systemImage: "hourglass", description: Text("Please wait..."))
+                    ContentUnavailableView("Game Not Found", systemImage: "trash", description: Text("This game has been deleted."))
                 }
             }
             .navigationDestination(isPresented: $showingHowToPlay) {
@@ -93,7 +93,9 @@ struct GameListView: View {
 
     private func delete(offsets: IndexSet) {
         for i in offsets {
-            modelContext.delete(games[i])
+            let game = games[i]
+            path.removeAll { $0 == game.id }
+            modelContext.delete(game)
         }
     }
 }
