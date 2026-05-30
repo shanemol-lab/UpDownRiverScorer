@@ -220,11 +220,14 @@ struct GameDetailView: View {
                     dismiss()
                 }
                 Button("Start back down") {
-                    // Begin the downward sequence early
+                    // Record the stable pivot before setting the flag so cardsPerPlayer
+                    // has a fixed reference point that won't shift as rounds are appended.
+                    if let last = game.roundsSorted.last {
+                        game.backDownPivotIndex = last.index
+                        game.backDownPivotCards = last.cardsPerPlayer
+                    }
                     game.startedBackDown = true
-                    // Add the next round which should be one fewer card than the current
                     if let newRound = addNextRound() {
-                        // Navigate to the new round
                         navigateToRound = newRound
                     }
                 }

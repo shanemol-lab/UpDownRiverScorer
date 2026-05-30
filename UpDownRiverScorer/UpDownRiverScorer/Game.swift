@@ -28,6 +28,14 @@ final class Game {
     /// If true, the game has begun the downward sequence early
     var startedBackDown: Bool = false
 
+    /// The round index at which early back-down was triggered. Stored once so
+    /// cardsPerPlayer(forRoundIndex:) has a stable pivot that doesn't shift as
+    /// new rounds are appended.
+    var backDownPivotIndex: Int? = nil
+
+    /// The card count of the last played round when early back-down was triggered.
+    var backDownPivotCards: Int? = nil
+
     /// When true, show a one-time hint in Game view instructing the user to tap Round 1 to begin.
     var showFirstVisitHint: Bool = true
 
@@ -69,26 +77,21 @@ final class Game {
 
     /// Sequence: 1..max..1, with optional early back-down once `startedBackDown` is set
     func cardsPerPlayer(forRoundIndex index: Int) -> Int {
-        // Standard sequence if not started back down
         if !startedBackDown {
             let seq = Rules.roundSequence(maxCards: maxCards)
             return seq[index]
         }
-        // Early back-down: compute from the current context
-        // Determine the last played round's cardsPerPlayer, or assume 1 if none
-        let lastCards = roundsSorted.last?.cardsPerPlayer ?? 1
-        // If already at 1, stay at 1
-        if lastCards <= 1 { return 1 }
-        // Build a descending sequence from lastCards-1 to 1
-        let down = Array(stride(from: lastCards - 1, through: 1, by: -1))
-        // Index relative to when early back-down starts: the first call after setting the flag should return lastCards-1
-        let relative = index - (roundsSorted.last?.index ?? -1) - 1
+        // Use stable pivot values recorded when back-down was triggered.
+        // Falling back to live data would shift the pivot each time a new round is appended.
+        let pivotIndex = backDownPivotIndex ?? (roundsSorted.last?.index ?? -1)
+        let pivotCards = backDownPivotCards ?? (roundsSorted.last?.cardsPerPlayer ?? 1)
+        if pivotCards <= 1 { return 1 }
+        let down = Array(stride(from: pivotCards - 1, through: 1, by: -1))
+        let relative = index - pivotIndex - 1
         if relative >= 0 && relative < down.count {
             return down[relative]
-        } else {
-            // Clamp to 1 if we run out
-            return 1
         }
+        return 1
     }
 
     /// Total number of rounds in this game. If we started back down early, cap the total to the current index plus the remaining rounds to 1.
@@ -96,16 +99,13 @@ final class Game {
         if !startedBackDown {
             return Rules.roundSequence(maxCards: maxCards).count
         }
-        // When started back down early, determine how many more rounds remain from the current lastCards down to 1
-        guard let last = roundsSorted.last else {
-            // No rounds yet; fall back to standard sequence
+        // Use stable pivot values so totalRounds doesn't shift as new rounds are appended.
+        guard let pivotIndex = backDownPivotIndex, let pivotCards = backDownPivotCards else {
             return Rules.roundSequence(maxCards: maxCards).count
         }
-        let lastCards = last.cardsPerPlayer
-        // Remaining rounds after the last index: (lastCards-1) rounds to reach 1
-        let remaining = max(0, lastCards - 1)
-        // Total rounds = rounds completed so far (last.index + 1) + remaining to reach 1
-        return (last.index + 1) + remaining
+        // Rounds up to and including the pivot + descending rounds from pivotCards-1 down to 1
+        let remaining = max(0, pivotCards - 1)
+        return (pivotIndex + 1) + remaining
     }
 
     /// True if the next round (based on existing rounds) would still be in the upward phase
