@@ -96,7 +96,6 @@ struct RankProgressionView: View {
             .symbol(Circle())
         }
         .foregroundStyle(series.color)
-        .foregroundStyle(by: .value("Player", series.id.uuidString))
     }
 
     var body: some View {

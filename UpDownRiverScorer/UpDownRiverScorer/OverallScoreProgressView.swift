@@ -86,7 +86,6 @@ struct OverallScoreProgressView: View {
                             .symbol(Circle())
                         }
                         .foregroundStyle(series.color)
-                        .foregroundStyle(by: .value("Player", series.id.uuidString))
                     }
                 }
                 .chartXAxis {
