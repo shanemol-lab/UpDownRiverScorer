@@ -123,7 +123,9 @@ final class Game {
             return true
         }
         guard let lastRound = roundsSorted.last else { return false }
-        return lastRound.isValid(enforceDealerForbidden: dealerForbiddenBidEnabled) && rounds.count >= totalRounds
+        return lastRound.index == totalRounds - 1
+            && lastRound.isValid(enforceDealerForbidden: dealerForbiddenBidEnabled)
+            && rounds.count >= totalRounds
     }
     /// Returns the completion date, either manual or inferred from the last round's creation date
     @Transient
