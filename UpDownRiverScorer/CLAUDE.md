@@ -143,13 +143,7 @@ If a plan exceeds ~5 steps, Claude should **pause and re-scope**.
 
 ## KNOWN ISSUES / TECH DEBT
 
-- `Round.isValid` and `RoundValidator` hardcode `enforceDealerForbidden: true` — they do not read the game's `dealerForbiddenBidEnabled` setting. Fix before adding new validation logic.
-- `Game.isGameCompleted` and `gameCompletionDate` use unsorted `rounds.last` — non-deterministic. Should use sorted rounds.
-- `GameDetailView.currentRoundCompletionMessage()` duplicates `RoundValidator.validate()` — consolidate before modifying either.
-- `RoundEditorViewModel.phase` is never read by the view (view uses its own `@State var phase`) — dead published property.
-- `DispatchQueue.main.async` used inside `@MainActor` methods in `RoundEditorViewModel` — redundant; use direct assignment.
-- `NotificationCenter` used to pass a newly-created `Game` from `NewGameView` to `GameListView` (stringly-typed `"PresentGameFullScreen"`) — replace with a typed callback or `@Binding`.
-- `reserveTrumpCard` is hardcoded to `true` in `NewGameViewModel.createGame()` despite being an optional rule — either expose it as a toggle or remove it from `Game.init`'s public surface.
+No known issues.
 
 ---
 
