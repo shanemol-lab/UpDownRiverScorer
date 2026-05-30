@@ -72,6 +72,7 @@ final class Game {
     /// Dealer rotates by round index; round 0 dealer = Player 1 (orderedPlayers[0])
     func dealer(forRoundIndex index: Int) -> Player {
         let ps = orderedPlayers
+        precondition(!ps.isEmpty, "dealer(forRoundIndex:) called on a game with no players")
         return ps[index % ps.count]
     }
 
