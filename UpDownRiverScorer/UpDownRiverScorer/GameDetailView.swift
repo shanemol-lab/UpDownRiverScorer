@@ -28,6 +28,23 @@ struct GameDetailView: View {
 
     private var currentRound: Round? { game.roundsSorted.last }
 
+    private var nextRoundButton: some View {
+        let msg = currentRoundCompletionMessage()
+        return Button("Next Round") {
+            if game.isGameCompleted { return }
+            if let msg {
+                roundIncompleteMessage = msg
+                showRoundIncompleteAlert = true
+            } else {
+                if let newRound = addNextRound() {
+                    navigateToRound = newRound
+                }
+            }
+        }
+        .disabled(game.isGameCompleted || msg != nil)
+        .buttonStyle(.borderedProminent)
+    }
+
     private func validate(round: Round) -> String? {
         return RoundValidator.validate(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
     }
@@ -154,19 +171,7 @@ struct GameDetailView: View {
                             .font(.headline)
                         Spacer()
                         if !game.isGameCompleted {
-                            Button("Next Round") {
-                                if game.isGameCompleted { return }
-                                if let msg = currentRoundCompletionMessage() {
-                                    roundIncompleteMessage = msg
-                                    showRoundIncompleteAlert = true
-                                } else {
-                                    if let newRound = addNextRound() {
-                                        navigateToRound = newRound
-                                    }
-                                }
-                            }
-                            .disabled(game.isGameCompleted || currentRoundCompletionMessage() != nil)
-                            .buttonStyle(.borderedProminent)
+                            nextRoundButton
                         }
                     }
                     .padding(.bottom, 4) // spacing below header for clarity
