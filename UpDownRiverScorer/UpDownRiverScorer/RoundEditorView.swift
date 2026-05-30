@@ -237,41 +237,39 @@ struct RoundEditorView: View {
         // Removed toolbar Done button as per instructions
         // MARK: - Sheet for bid lock confirmation (replacing confirmationDialog)
         .sheet(isPresented: $showBidLockConfirmation) {
-            VStack(spacing: 20) {
-                Text("Lock in Bids?")
-                    .font(.title2)
-                    .bold()
-                    .padding(.top)
-                Text("Bids cannot be changed after proceeding. Are you sure you want to lock in these bids?")
-                    .multilineTextAlignment(.center)
+            ScrollView {
+                VStack(spacing: 20) {
+                    Text("Lock in Bids?")
+                        .font(.title2)
+                        .bold()
+                        .padding(.top)
+                    Text("Bids cannot be changed after proceeding. Are you sure you want to lock in these bids?")
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                    Toggle("Don't show again during this game", isOn: Binding(
+                        get: { game.suppressBidLockConfirmation },
+                        set: { game.suppressBidLockConfirmation = $0 }
+                    ))
+                    .toggleStyle(SwitchToggleStyle())
                     .padding(.horizontal)
-                // Toggle for suppressing dialog in current game session
-                Toggle("Don't show again during this game", isOn: Binding(
-                    get: { game.suppressBidLockConfirmation },
-                    set: { game.suppressBidLockConfirmation = $0 }
-                ))
-                .toggleStyle(SwitchToggleStyle())
-                .padding(.horizontal)
 
-                HStack {
-                    Button("Change Bids") {
-                        // Dismiss sheet to allow edits
-                        showBidLockConfirmation = false
+                    HStack {
+                        Button("Change Bids") {
+                            showBidLockConfirmation = false
+                        }
+                        Spacer()
+                        Button("Proceed") {
+                            bidsLocked = true
+                            phase = .tricks
+                            showBidLockConfirmation = false
+                        }
+                        .foregroundStyle(.red)
                     }
-                    Spacer()
-                    Button("Proceed") {
-                        // Lock bids and advance to tricks phase, then dismiss sheet
-                        bidsLocked = true
-                        phase = .tricks
-                        showBidLockConfirmation = false
-                    }
-                    .foregroundStyle(.red)
+                    .padding(.horizontal)
+                    .padding(.bottom)
                 }
-                .padding(.horizontal)
-                .padding(.bottom)
             }
-            // Ensure the sheet content adapts nicely on all device sizes
-            .presentationDetents([.fraction(0.35)])
+            .presentationDetents([.medium])
         }
         .alert("Incomplete Tricks Allocation", isPresented: $showTricksIncompleteAlert) {
             Button("OK", role: .cancel) { }
