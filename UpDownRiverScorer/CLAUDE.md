@@ -22,11 +22,13 @@ Claude MUST follow this loop at all times and MUST NOT skip steps.
 - Prefer vertical slices over phases
 - Produce a concise, numbered plan with a concrete verification step
 - **Do NOT implement unless explicitly told to**
+- **HARD STOP after presenting a plan** — end the message after the plan. Do not implement in the same message. Wait for the user to reply before proceeding. A "Shall I proceed?" question does not substitute for stopping.
 - Bash commands that do not create, update, or delete are always allowed in plan phase
 - If a plan exceeds ~5 steps, pause and re-scope
 
 ### 2. Review
 - Wait for explicit approval before implementing
+- **The user's reply approving the plan is the ONLY trigger to move to Execute. Do not bundle plan + execution in a single message under any circumstances.**
 - Accept scope corrections without resistance
 - Bash commands that do not create, update, or delete are always allowed in review phase
 
