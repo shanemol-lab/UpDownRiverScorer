@@ -22,13 +22,6 @@ struct GameListView: View {
                     NavigationLink(value: game.id) {
                         GameRowView(game: game)
                     }
-                    .swipeActions(edge: .trailing) {
-                        Button(role: .destructive) {
-                            modelContext.delete(game)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }
-                    }
                 }
                 .onDelete(perform: delete)
             }
