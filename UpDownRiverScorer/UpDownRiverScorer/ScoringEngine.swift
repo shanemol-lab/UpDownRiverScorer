@@ -13,14 +13,10 @@ struct ScoringEngine {
         var totals: [UUID: Int] = [:]
         for p in game.players { totals[p.id] = 0 }
 
-        for round in game.rounds.sorted(by: { $0.index < $1.index }) {
-            let R = round.cardsPerPlayer
-            let trickValues = round.entries.map { $0.tricks }
-            let totalTricks = trickValues.reduce(0, +)
-            let tricksInRange = trickValues.allSatisfy { $0 >= 0 && $0 <= R }
-
-            // Only count a round when all tricks have been assigned and the sum equals R
-            guard tricksInRange && totalTricks == R else { continue }
+        for round in game.roundsSorted {
+            // Use the same validity gate as the UI so scored rounds are consistent
+            // with rounds shown as complete.
+            guard round.isValid(enforceDealerForbidden: game.dealerForbiddenBidEnabled) else { continue }
 
             for entry in round.entries {
                 guard let pid = entry.player?.id else { continue }
