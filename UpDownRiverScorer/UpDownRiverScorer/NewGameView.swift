@@ -18,7 +18,6 @@ struct NewGameView: View {
     @State private var showMaxHandSizeSheet = false
     @State private var maxHandSizeValue: Int = 1
     @State private var showVariantConfirmation = false
-    @State private var pendingStart = false
 
     private var isReserveTrumpCardChanged: Bool { vm.reserveTrumpCard == false }
     private var isDealerBidChanged: Bool { vm.dealerForbiddenBidEnabled == false }
@@ -123,7 +122,6 @@ struct NewGameView: View {
                             startGame()
                         } else {
                             showVariantConfirmation = true
-                            pendingStart = true
                         }
                     }
                 }
@@ -253,13 +251,13 @@ struct NewGameView: View {
                     HStack {
                         Button("Change Selection") {
                             showVariantConfirmation = false
-                            pendingStart = false
+
                         }
                         .buttonStyle(.bordered)
                         Spacer()
                         Button("Proceed") {
                             showVariantConfirmation = false
-                            pendingStart = false
+
                             startGame()
                         }
                         .buttonStyle(.borderedProminent)

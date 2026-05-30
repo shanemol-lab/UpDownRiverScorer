@@ -12,7 +12,6 @@ struct GameListView: View {
     @Query(sort: \Game.createdAt, order: .reverse) private var games: [Game]
     @State private var showingNewGame = false
     @State private var path: [UUID] = []
-    @State private var pendingGameId: UUID? = nil
     @State private var showGameFullScreen = false
     @State private var createdGameForFullScreen: Game? = nil
 
@@ -84,11 +83,6 @@ struct GameListView: View {
             NewGameView { game in
                 createdGameForFullScreen = game
                 showGameFullScreen = true
-            }
-        }
-        .onChange(of: showingNewGame) { oldValue, isPresented in
-            if oldValue == true && isPresented == false {
-                pendingGameId = nil
             }
         }
         .fullScreenCover(isPresented: $showGameFullScreen) {
