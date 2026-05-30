@@ -225,6 +225,14 @@ struct NewGameView: View {
                     showMaxHandSizeSheet = true
                 }
             }
+            .onChange(of: vm.reserveTrumpCard) { _, _ in
+                if vm.maximumHandSizeEnabled {
+                    let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
+                    if let m = vm.maximumHandSize, m > allowed {
+                        vm.maximumHandSize = allowed
+                    }
+                }
+            }
 
             .sheet(isPresented: $showVariantConfirmation) {
                 VStack(alignment: .leading, spacing: 20) {
