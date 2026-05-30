@@ -235,6 +235,7 @@ struct RoundEditorView: View {
             vm.updateTotalBids(from: round)
             if isRoundComplete {
                 phase = .tricks
+                bidsLocked = true
             } else {
                 phase = .bids
             }
