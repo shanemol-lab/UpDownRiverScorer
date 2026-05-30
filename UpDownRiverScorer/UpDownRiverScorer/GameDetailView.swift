@@ -26,13 +26,7 @@ struct GameDetailView: View {
         return sortedPlayerTotals
     }
 
-    private var currentRound: Round? {
-        game.rounds.sorted(by: { $0.index < $1.index }).last
-    }
-    
-    private var sortedRounds: [Round] {
-        game.rounds.sorted { $0.index < $1.index }
-    }
+    private var currentRound: Round? { game.roundsSorted.last }
 
     private func validate(round: Round) -> String? {
         return RoundValidator.validate(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
@@ -142,7 +136,7 @@ struct GameDetailView: View {
                 // Custom Header for Rounds Section with Next Round button beside the title
                 Section {
                     // The rounds list rows
-                    ForEach(sortedRounds) { round in
+                    ForEach(game.roundsSorted) { round in
                         RoundRow(game: game, round: round)
                     }
                     
@@ -178,7 +172,7 @@ struct GameDetailView: View {
                     .padding(.bottom, 4) // spacing below header for clarity
                 }
 
-                if let round = currentRound {
+                if let round = currentRound, !round.isValid(enforceDealerForbidden: game.dealerForbiddenBidEnabled) {
                     Section {
                         NavigationLink {
                             RoundEditorView(game: game, round: round)
@@ -252,7 +246,7 @@ struct GameDetailView: View {
     }
 
     @discardableResult private func addNextRound() -> Round? {
-        let nextIndex = (game.rounds.map(\.index).max() ?? -1) + 1
+        let nextIndex = (game.roundsSorted.last?.index ?? -1) + 1
         guard nextIndex < game.totalRounds else { return nil }
 
         let dealer = game.dealer(forRoundIndex: nextIndex)
