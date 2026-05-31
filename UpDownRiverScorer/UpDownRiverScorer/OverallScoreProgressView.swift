@@ -6,10 +6,6 @@ struct OverallScoreProgressView: View {
 
     @State private var filteredPlayer: Player? = nil
 
-    private var orderedPlayers: [Player] {
-        game.orderedPlayers
-    }
-
     private var completedRounds: [Round] {
         game.roundsSorted.filter { $0.isValid(enforceDealerForbidden: game.dealerForbiddenBidEnabled) }
     }
@@ -28,7 +24,7 @@ struct OverallScoreProgressView: View {
     }
 
     private var chartSeries: [PlayerSeries] {
-        let players = orderedPlayers
+        let players = game.orderedPlayers
         var seriesForPlayer: [UUID: [Point]] = Dictionary(uniqueKeysWithValues: players.map { ($0.id, []) })
 
         for (round, totals) in ScoringEngine.cumulativeTotalsPerRound(game: game) {
@@ -98,7 +94,7 @@ struct OverallScoreProgressView: View {
                 // Legend with tap-to-filter
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 12) {
-                        ForEach(orderedPlayers, id: \.id) { p in
+                        ForEach(game.orderedPlayers, id: \.id) { p in
                             let isSelected = filteredPlayer?.id == p.id
                             HStack(spacing: 8) {
                                 Circle()

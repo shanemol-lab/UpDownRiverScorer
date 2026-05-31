@@ -80,6 +80,7 @@ final class Game {
     func cardsPerPlayer(forRoundIndex index: Int) -> Int {
         if !startedBackDown {
             let seq = Rules.roundSequence(maxCards: maxCards)
+            precondition(index < seq.count, "cardsPerPlayer(forRoundIndex:) out-of-bounds: index \(index), seq.count \(seq.count)")
             return seq[index]
         }
         // Use stable pivot values recorded when back-down was triggered.
