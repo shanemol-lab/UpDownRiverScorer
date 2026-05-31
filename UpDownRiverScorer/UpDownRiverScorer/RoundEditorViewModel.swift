@@ -41,7 +41,7 @@ final class RoundEditorViewModel: ObservableObject {
 
         let result = Rules.validateBids(cardsPerPlayer: R, dealerPlayerId: dealerId, bidsByPlayerId: bids, enforceDealerForbidden: enforceDealerForbidden)
         bidMessage = result.message
-        forbiddenBidHint = result.forbiddenDealerBid != nil ? result.message : nil
+        forbiddenBidHint = (result.forbiddenDealerBid != nil && result.isValid) ? result.message : nil
         bidsAreValid = result.isValid
         updateTotalBids(from: round)
         return result.isValid
