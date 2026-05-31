@@ -231,6 +231,7 @@ struct RoundEditorView: View {
             if isRoundComplete {
                 phase = .tricks
                 bidsLocked = true
+                tricksLocked = true
             } else {
                 bidsLocked = false
                 _ = vm.validateBids(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)
