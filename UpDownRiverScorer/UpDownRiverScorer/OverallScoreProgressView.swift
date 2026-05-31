@@ -15,10 +15,10 @@ struct OverallScoreProgressView: View {
     }
 
     struct Point: Identifiable, Hashable {
-        let id = UUID()
         let player: Player
         let roundIndex: Int // 1-based for display
         let total: Int
+        var id: String { "\(player.id)-\(roundIndex)" }
     }
 
     struct PlayerSeries: Identifiable {

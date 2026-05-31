@@ -7,10 +7,10 @@ struct RankProgressionView: View {
     @State private var filteredPlayer: Player? = nil // State to track filtered player for chart
 
     struct Point: Identifiable, Hashable {
-        let id = UUID()
         let player: Player
         let roundIndex: Int // 0-based
         let rank: Int       // 1 is top
+        var id: String { "\(player.id)-\(roundIndex)" }
     }
 
     struct PlayerSeries: Identifiable {
