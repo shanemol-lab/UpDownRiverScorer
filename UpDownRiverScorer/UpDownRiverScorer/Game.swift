@@ -116,7 +116,7 @@ final class Game {
     var isCurrentlyHeadingUp: Bool {
         // No rounds yet -> heading up
         guard let last = roundsSorted.last else { return true }
-        return last.cardsPerPlayer < maxCards
+        return !startedBackDown && last.cardsPerPlayer < maxCards
     }
 
     /// Returns true if the game is completed either by manual completion or by the final round being valid
