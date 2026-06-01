@@ -19,10 +19,6 @@ struct RankProgressionView: View {
         let points: [Point]
     }
 
-    private var completedRounds: [Round] {
-        game.roundsSorted.filter { $0.isValid(enforceDealerForbidden: game.dealerForbiddenBidEnabled) }
-    }
-
     private var dataPoints: [Point] {
         let players = game.orderedPlayers
         var points: [Point] = []
@@ -85,7 +81,7 @@ struct RankProgressionView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            if completedRounds.isEmpty {
+            if game.completedRounds.isEmpty {
                 ContentUnavailableView("No completed rounds yet", systemImage: "chart.line.uptrend.xyaxis", description: Text("Finish at least one round to see rank progression."))
             } else {
                 // Clear Filter Button always visible, disabled if no filter active
@@ -97,7 +93,7 @@ struct RankProgressionView: View {
                 .padding(.bottom, 4)
 
                 // +1 pads the right edge so the last data point isn't flush against the axis
-                let xUpperBound = max(1, completedRounds.count)
+                let xUpperBound = max(1, game.completedRounds.count)
                 Chart {
                     // Filter series by selected player if any
                     ForEach(chartSeries.filter { filteredPlayer == nil || $0.id == filteredPlayer!.id }, id: \.id) { series in
@@ -105,7 +101,7 @@ struct RankProgressionView: View {
                     }
                 }
                 .chartXAxis {
-                    AxisMarks(position: .bottom, values: Array(1...completedRounds.count)) { v in
+                    AxisMarks(position: .bottom, values: Array(1...game.completedRounds.count)) { v in
                         AxisGridLine()
                         AxisTick()
                         if let val = v.as(Int.self) {

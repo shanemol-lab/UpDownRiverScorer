@@ -14,7 +14,6 @@ final class RoundEditorViewModel: ObservableObject {
     let titleLeadingPadding: CGFloat = 12
     let doneTrailingPadding: CGFloat = 12
 
-    @Published var bidMessage: String?
     @Published var forbiddenBidHint: String?
     @Published var bidsAreValid: Bool = false
     @Published var trickMessage: String?
@@ -33,7 +32,6 @@ final class RoundEditorViewModel: ObservableObject {
     func validateBids(round: Round, enforceDealerForbidden: Bool = true) -> Bool {
         guard let dealerId = round.dealer?.id else {
             bidsAreValid = false
-            bidMessage = nil
             forbiddenBidHint = nil
             return false
         }
@@ -45,7 +43,6 @@ final class RoundEditorViewModel: ObservableObject {
         }
 
         let result = Rules.validateBids(cardsPerPlayer: R, dealerPlayerId: dealerId, bidsByPlayerId: bids, enforceDealerForbidden: enforceDealerForbidden)
-        bidMessage = result.message
         forbiddenBidHint = result.forbiddenDealerBid != nil ? result.message : nil
         bidsAreValid = result.isValid
         updateTotalBids(from: round)

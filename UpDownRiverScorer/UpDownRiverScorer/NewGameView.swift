@@ -90,7 +90,7 @@ struct NewGameView: View {
                     }
                     if vm.maximumHandSizeEnabled {
                         Button {
-                            let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
+                            let allowed = vm.allowedMaxCards
                             if let m = vm.maximumHandSize {
                                 maxHandSizeValue = min(max(1, m), allowed)
                             } else {
@@ -169,20 +169,20 @@ struct NewGameView: View {
                     NavigationStack {
                         Form {
                             Section("Choose maximum hand size") {
-                                let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
+                                let allowed = vm.allowedMaxCards
                                 Text("Up to \(allowed) cards based on player count.")
                                     .font(.footnote)
                                     .foregroundStyle(.secondary)
                                 Stepper(value: Binding(
                                     get: {
-                                        let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
+                                        let allowed = vm.allowedMaxCards
                                         return min(maxHandSizeValue, allowed)
                                     },
                                     set: { newVal in
-                                        let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
+                                        let allowed = vm.allowedMaxCards
                                         maxHandSizeValue = min(max(1, newVal), allowed)
                                     }
-                                ), in: 1...Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)) {
+                                ), in: 1...vm.allowedMaxCards) {
                                     HStack {
                                         Text("Maximum: ")
                                         Spacer()
@@ -199,7 +199,7 @@ struct NewGameView: View {
                             }
                             ToolbarItem(placement: .confirmationAction) {
                                 Button("Save") {
-                                    let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
+                                    let allowed = vm.allowedMaxCards
                                     maxHandSizeValue = min(max(1, maxHandSizeValue), allowed)
                                     vm.maximumHandSize = maxHandSizeValue
                                     activeSheet = nil
@@ -208,7 +208,7 @@ struct NewGameView: View {
                         }
                     }
                     .onAppear {
-                        let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
+                        let allowed = vm.allowedMaxCards
                         if let m = vm.maximumHandSize {
                             maxHandSizeValue = min(max(1, m), allowed)
                         } else {
@@ -257,13 +257,13 @@ struct NewGameView: View {
             }
             .onChange(of: vm.maximumHandSizeEnabled) { oldValue, enabled in
                 if enabled && vm.maximumHandSize == nil {
-                    maxHandSizeValue = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
+                    maxHandSizeValue = vm.allowedMaxCards
                     activeSheet = .maxHandSize
                 }
             }
             .onChange(of: vm.reserveTrumpCard) { _, _ in
                 if vm.maximumHandSizeEnabled {
-                    let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
+                    let allowed = vm.allowedMaxCards
                     if let m = vm.maximumHandSize, m > allowed {
                         vm.maximumHandSize = allowed
                     }
@@ -274,7 +274,7 @@ struct NewGameView: View {
 
     private func startGame() {
         if vm.maximumHandSizeEnabled {
-            let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
+            let allowed = vm.allowedMaxCards
             if let n = vm.maximumHandSize { vm.maximumHandSize = min(max(1, n), allowed) }
         }
         let game = vm.createGame(modelContext: modelContext)

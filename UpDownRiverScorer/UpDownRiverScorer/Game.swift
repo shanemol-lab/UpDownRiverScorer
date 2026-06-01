@@ -119,6 +119,11 @@ final class Game {
         return !startedBackDown && last.cardsPerPlayer < maxCards
     }
 
+    @Transient
+    var completedRounds: [Round] {
+        roundsSorted.filter { $0.isValid(enforceDealerForbidden: dealerForbiddenBidEnabled) }
+    }
+
     /// Returns true if the game is completed either by manual completion or by the final round being valid
     @Transient
     var isGameCompleted: Bool {

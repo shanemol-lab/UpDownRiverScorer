@@ -19,6 +19,10 @@ final class NewGameViewModel: ObservableObject {
     @Published var maximumHandSizeEnabled: Bool = false
     @Published var maximumHandSize: Int? = nil
 
+    var allowedMaxCards: Int {
+        Rules.maxCards(playerCount: playerCount, reserveTrumpCard: reserveTrumpCard)
+    }
+
     func setPlayerCount(_ count: Int) {
         let clamped = min(8, max(3, count))
         playerCount = clamped

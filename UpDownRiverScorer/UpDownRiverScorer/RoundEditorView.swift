@@ -42,8 +42,6 @@ struct RoundEditorView: View {
     // Updated computed property per instructions
     private var isTrickEditingLocked: Bool { isActiveRound ? tricksLocked : true }
 
-    /// Derived from already-published vm.bidMessage — avoids calling validateBids (which has
-    /// side effects) inside a view modifier during layout.
     private var isBidsDoneButtonDisabled: Bool {
         bidsLocked || isRoundComplete || !vm.bidsAreValid
     }

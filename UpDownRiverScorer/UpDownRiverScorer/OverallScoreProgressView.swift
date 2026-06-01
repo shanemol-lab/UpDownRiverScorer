@@ -6,10 +6,6 @@ struct OverallScoreProgressView: View {
 
     @State private var filteredPlayer: Player? = nil
 
-    private var completedRounds: [Round] {
-        game.roundsSorted.filter { $0.isValid(enforceDealerForbidden: game.dealerForbiddenBidEnabled) }
-    }
-
     struct Point: Identifiable, Hashable {
         let player: Player
         let roundIndex: Int // 1-based for display
@@ -42,7 +38,7 @@ struct OverallScoreProgressView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            if completedRounds.isEmpty {
+            if game.completedRounds.isEmpty {
                 ContentUnavailableView("No completed rounds yet", systemImage: "chart.line.uptrend.xyaxis", description: Text("Finish at least one round to see score progress."))
             } else {
                 // Clear Filter Button
@@ -54,7 +50,7 @@ struct OverallScoreProgressView: View {
                 .padding(.bottom, 4)
 
                 // +1 pads the right edge so the last data point isn't flush against the axis
-                let xUpperBound = max(1, completedRounds.count)
+                let xUpperBound = max(1, game.completedRounds.count)
 
                 Chart {
                     ForEach(chartSeries.filter { filteredPlayer == nil || $0.id == filteredPlayer!.id }, id: \.id) { series in
@@ -73,7 +69,7 @@ struct OverallScoreProgressView: View {
                     range: chartSeries.map { $0.color }
                 )
                 .chartXAxis {
-                    AxisMarks(position: .bottom, values: Array(1...completedRounds.count)) { v in
+                    AxisMarks(position: .bottom, values: Array(1...game.completedRounds.count)) { v in
                         AxisGridLine()
                         AxisTick()
                         if let val = v.as(Int.self) {
