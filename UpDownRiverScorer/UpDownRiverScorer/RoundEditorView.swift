@@ -66,6 +66,7 @@ struct RoundEditorView: View {
                 }
             }
             .pickerStyle(.segmented)
+            .disabled(isRoundComplete)
 
             // MARK: - Custom header with phase title and Done button above player list
             HStack {
