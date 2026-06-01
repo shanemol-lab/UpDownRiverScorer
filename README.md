@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="UpDownRiverScorer/Assets.xcassets/AppIcon.appiconset/UpDownRiverIcon.png" alt="Bugger It Scorer Icon" width="120" height="120">
+  <img src="UpDownRiverScorer/UpDownRiverScorer/Assets.xcassets/AppIcon.appiconset/UpDownRiverIcon.png" alt="Bugger It Scorer Icon" width="120" height="120">
 </p>
 
 <h1 align="center">Bugger It Scorer</h1>
