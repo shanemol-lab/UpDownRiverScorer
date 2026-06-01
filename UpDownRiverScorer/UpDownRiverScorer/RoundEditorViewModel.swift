@@ -31,7 +31,12 @@ final class RoundEditorViewModel: ObservableObject {
     }
 
     func validateBids(round: Round, enforceDealerForbidden: Bool = true) -> Bool {
-        guard let dealerId = round.dealer?.id else { return false }
+        guard let dealerId = round.dealer?.id else {
+            bidsAreValid = false
+            bidMessage = nil
+            forbiddenBidHint = nil
+            return false
+        }
         let R = round.cardsPerPlayer
 
         var bids: [UUID: Int] = [:]
