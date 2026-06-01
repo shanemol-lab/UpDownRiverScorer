@@ -13,12 +13,15 @@ struct NewGameView: View {
 
     var onGameCreated: (Game) -> Void = { _ in }
 
-    @State private var showDealerInfo = true
+    private enum ActiveSheet: Identifiable {
+        case dealerInfo, maxHandSize, variantConfirmation
+        var id: Self { self }
+    }
+
+    @State private var activeSheet: ActiveSheet? = .dealerInfo
 
     @StateObject private var vm = NewGameViewModel()
-    @State private var showMaxHandSizeSheet = false
     @State private var maxHandSizeValue: Int = 1
-    @State private var showVariantConfirmation = false
 
     private var isReserveTrumpCardChanged: Bool { vm.reserveTrumpCard == false }
     private var isDealerBidChanged: Bool { vm.dealerForbiddenBidEnabled == false }
@@ -93,7 +96,7 @@ struct NewGameView: View {
                             } else {
                                 maxHandSizeValue = allowed
                             }
-                            showMaxHandSizeSheet = true
+                            activeSheet = .maxHandSize
                         } label: {
                             HStack {
                                 Text("Set Maximum")
@@ -122,102 +125,140 @@ struct NewGameView: View {
                         if !isReserveTrumpCardChanged && !isDealerBidChanged && !isMaxHandSizeChanged {
                             startGame()
                         } else {
-                            showVariantConfirmation = true
+                            activeSheet = .variantConfirmation
                         }
                     }
                 }
             }
-            .sheet(isPresented: $showDealerInfo) {
-                VStack(alignment: .leading, spacing: 16) {
-                    HStack(spacing: 12) {
-                        Image(systemName: "person.2.crop.square.stack")
-                            .font(.largeTitle)
-                            .foregroundStyle(.tint)
-                        Text("Choose the First Dealer")
-                            .font(.title2).bold()
-                    }
+            .sheet(item: $activeSheet) { sheet in
+                switch sheet {
+                case .dealerInfo:
+                    VStack(alignment: .leading, spacing: 16) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "person.2.crop.square.stack")
+                                .font(.largeTitle)
+                                .foregroundStyle(.tint)
+                            Text("Choose the First Dealer")
+                                .font(.title2).bold()
+                        }
 
-                    Text("Before entering player names, decide who will be the first dealer.")
+                        Text("Before entering player names, decide who will be the first dealer.")
+                            .font(.body)
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("• Enter the first dealer as \"Player 1\".")
+                            Text("• The player to their left is \"Player 2\" and so on.")
+                        }
                         .font(.body)
 
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("• Enter the first dealer as \"Player 1\".")
-                        Text("• The player to their left is \"Player 2\" and so on.")
-                    }
-                    .font(.body)
+                        Spacer()
 
-                    Spacer()
+                        Button {
+                            activeSheet = nil
+                        } label: {
+                            Text("Got it")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                    .padding()
+                    .presentationDetents([.medium])
+                    .presentationDragIndicator(.visible)
 
-                    Button {
-                        showDealerInfo = false
-                    } label: {
-                        Text("Got it")
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.borderedProminent)
-                }
-                .padding()
-                .presentationDetents([.medium])
-                .presentationDragIndicator(.visible)
-            }
-            .sheet(isPresented: $showMaxHandSizeSheet) {
-                NavigationStack {
-                    Form {
-                        Section("Choose maximum hand size") {
-                            let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
-                            Text("Up to \(allowed) cards based on player count.")
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                            Stepper(value: Binding(
-                                get: {
-                                    let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
-                                    return min(maxHandSizeValue, allowed)
-                                },
-                                set: { newVal in
-                                    let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
-                                    maxHandSizeValue = min(max(1, newVal), allowed)
-                                }
-                            ), in: 1...Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)) {
-                                HStack {
-                                    Text("Maximum: ")
-                                    Spacer()
-                                    Text("\(maxHandSizeValue) card(s)")
-                                        .monospacedDigit()
-                                }
-                            }
-                        }
-                    }
-                    .navigationTitle("Maximum Hand Size")
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel") { showMaxHandSizeSheet = false }
-                        }
-                        ToolbarItem(placement: .confirmationAction) {
-                            Button("Save") {
+                case .maxHandSize:
+                    NavigationStack {
+                        Form {
+                            Section("Choose maximum hand size") {
                                 let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
-                                maxHandSizeValue = min(max(1, maxHandSizeValue), allowed)
-                                vm.maximumHandSize = maxHandSizeValue
-                                showMaxHandSizeSheet = false
+                                Text("Up to \(allowed) cards based on player count.")
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                                Stepper(value: Binding(
+                                    get: {
+                                        let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
+                                        return min(maxHandSizeValue, allowed)
+                                    },
+                                    set: { newVal in
+                                        let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
+                                        maxHandSizeValue = min(max(1, newVal), allowed)
+                                    }
+                                ), in: 1...Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)) {
+                                    HStack {
+                                        Text("Maximum: ")
+                                        Spacer()
+                                        Text("\(maxHandSizeValue) card(s)")
+                                            .monospacedDigit()
+                                    }
+                                }
+                            }
+                        }
+                        .navigationTitle("Maximum Hand Size")
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Cancel") { activeSheet = nil }
+                            }
+                            ToolbarItem(placement: .confirmationAction) {
+                                Button("Save") {
+                                    let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
+                                    maxHandSizeValue = min(max(1, maxHandSizeValue), allowed)
+                                    vm.maximumHandSize = maxHandSizeValue
+                                    activeSheet = nil
+                                }
                             }
                         }
                     }
-                }
-                .onAppear {
-                    // Initialize the stepper value from the existing selection or default to allowed
-                    let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
-                    if let m = vm.maximumHandSize {
-                        maxHandSizeValue = min(max(1, m), allowed)
-                    } else {
-                        maxHandSizeValue = allowed
+                    .onAppear {
+                        let allowed = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
+                        if let m = vm.maximumHandSize {
+                            maxHandSizeValue = min(max(1, m), allowed)
+                        } else {
+                            maxHandSizeValue = allowed
+                        }
                     }
+                    .presentationDetents([.medium])
+                    .presentationDragIndicator(.visible)
+
+                case .variantConfirmation:
+                    VStack(alignment: .leading, spacing: 20) {
+                        Text("Confirm Variants")
+                            .font(.title2).bold()
+                            .padding(.bottom, 4)
+                        Text("You have chosen to change the following rule variant(s):")
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                            .padding(.bottom, 2)
+                        ForEach(variantMessages, id: \.self) { msg in
+                            Text(msg)
+                                .font(.body)
+                        }
+                        Text("If you are happy with these changes, select Proceed. Otherwise, use Change Selection to adjust your choices.")
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                            .padding(.top, 8)
+                        Spacer(minLength: 20)
+                        HStack {
+                            Button("Change Selection") {
+                                activeSheet = nil
+                            }
+                            .buttonStyle(.bordered)
+                            Spacer()
+                            Button("Proceed") {
+                                activeSheet = nil
+                                startGame()
+                            }
+                            .buttonStyle(.borderedProminent)
+                        }
+                        .padding(.top, 10)
+                    }
+                    .padding()
+                    .presentationDetents([.medium])
+                    .presentationDragIndicator(.visible)
                 }
-                .presentationDetents([.medium])
-                .presentationDragIndicator(.visible)
             }
             .onChange(of: vm.maximumHandSizeEnabled) { oldValue, enabled in
                 if enabled && vm.maximumHandSize == nil {
                     maxHandSizeValue = Rules.maxCards(playerCount: vm.playerCount, reserveTrumpCard: vm.reserveTrumpCard)
-                    showMaxHandSizeSheet = true
+                    activeSheet = .maxHandSize
                 }
             }
             .onChange(of: vm.reserveTrumpCard) { _, _ in
@@ -227,45 +268,6 @@ struct NewGameView: View {
                         vm.maximumHandSize = allowed
                     }
                 }
-            }
-
-            .sheet(isPresented: $showVariantConfirmation) {
-                VStack(alignment: .leading, spacing: 20) {
-                    Text("Confirm Variants")
-                        .font(.title2).bold()
-                        .padding(.bottom, 4)
-                    Text("You have chosen to change the following rule variant(s):")
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                        .padding(.bottom, 2)
-                    ForEach(variantMessages, id: \.self) { msg in
-                        Text(msg)
-                            .font(.body)
-                    }
-                    Text("If you are happy with these changes, select Proceed. Otherwise, use Change Selection to adjust your choices.")
-                        .font(.callout)
-                        .foregroundStyle(.secondary)
-                        .padding(.top, 8)
-                    Spacer(minLength: 20)
-                    HStack {
-                        Button("Change Selection") {
-                            showVariantConfirmation = false
-
-                        }
-                        .buttonStyle(.bordered)
-                        Spacer()
-                        Button("Proceed") {
-                            showVariantConfirmation = false
-
-                            startGame()
-                        }
-                        .buttonStyle(.borderedProminent)
-                    }
-                    .padding(.top, 10)
-                }
-                .padding()
-                .presentationDetents([.medium])
-                .presentationDragIndicator(.visible)
             }
         }
     }
