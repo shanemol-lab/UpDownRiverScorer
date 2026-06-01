@@ -260,9 +260,9 @@ struct GameDetailView: View {
         let R = game.cardsPerPlayer(forRoundIndex: nextIndex)
         let round = Round(index: nextIndex, cardsPerPlayer: R, dealer: dealer, players: game.orderedPlayers)
 
-        game.rounds.append(round)
         modelContext.insert(round)
         round.entries.forEach { modelContext.insert($0) }
+        game.rounds.append(round)
         return round
     }
     
