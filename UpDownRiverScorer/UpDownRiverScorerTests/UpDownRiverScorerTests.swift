@@ -67,3 +67,22 @@ struct ValidateTricksTests {
         #expect(result.message == "No tricks have been entered.")
     }
 }
+
+struct RoundSequenceTests {
+
+    @Test func singleCardReturnsOneRound() {
+        #expect(Rules.roundSequence(maxCards: 1) == [1])
+    }
+
+    @Test func twoCardsSequence() {
+        #expect(Rules.roundSequence(maxCards: 2) == [1, 2, 1])
+    }
+
+    @Test func threeCardsSequence() {
+        #expect(Rules.roundSequence(maxCards: 3) == [1, 2, 3, 2, 1])
+    }
+
+    @Test func fiveCardsSequence() {
+        #expect(Rules.roundSequence(maxCards: 5) == [1, 2, 3, 4, 5, 4, 3, 2, 1])
+    }
+}
