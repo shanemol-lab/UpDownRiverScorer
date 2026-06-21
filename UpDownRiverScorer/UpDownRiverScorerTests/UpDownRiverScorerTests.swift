@@ -7,6 +7,7 @@
 
 import Testing
 @testable import UpDownRiverScorer
+import Foundation
 
 struct RulesTests {
 

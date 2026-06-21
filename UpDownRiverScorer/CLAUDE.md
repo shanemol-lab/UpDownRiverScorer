@@ -143,10 +143,6 @@ If a plan exceeds ~5 steps, Claude should **pause and re-scope**.
 
 ---
 
-## KNOWN ISSUES / TECH DEBT
-
-- `RoundEditorViewModel.bidMessage` is a `@Published` property that is written in `validateBids` but never read by any view — dead published state, should be removed.
-
 ---
 
 ## Project Overview

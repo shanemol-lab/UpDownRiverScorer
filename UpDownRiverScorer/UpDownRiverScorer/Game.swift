@@ -143,5 +143,22 @@ final class Game {
         }
         return roundsSorted.last?.createdAt
     }
+
+    @discardableResult func appendNextRound(into context: ModelContext) -> Round? {
+        let nextIndex = (roundsSorted.last?.index ?? -1) + 1
+        guard nextIndex < totalRounds else { return nil }
+        guard !rounds.contains(where: { $0.index == nextIndex }) else { return nil }
+
+        let round = Round(
+            index: nextIndex,
+            cardsPerPlayer: cardsPerPlayer(forRoundIndex: nextIndex),
+            dealer: dealer(forRoundIndex: nextIndex),
+            players: orderedPlayers
+        )
+        context.insert(round)
+        round.entries.forEach { context.insert($0) }
+        rounds.append(round)
+        return round
+    }
 }
 

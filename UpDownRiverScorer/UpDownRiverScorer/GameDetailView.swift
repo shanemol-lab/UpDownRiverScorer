@@ -36,7 +36,7 @@ struct GameDetailView: View {
                 roundIncompleteMessage = msg
                 showRoundIncompleteAlert = true
             } else {
-                if let newRound = addNextRound() {
+                if let newRound = game.appendNextRound(into: modelContext) {
                     navigateToRound = newRound
                 }
             }
@@ -221,7 +221,7 @@ struct GameDetailView: View {
                         game.backDownPivotCards = last.cardsPerPlayer
                     }
                     game.startedBackDown = true
-                    if let newRound = addNextRound() {
+                    if let newRound = game.appendNextRound(into: modelContext) {
                         navigateToRound = newRound
                     }
                 }
@@ -251,21 +251,6 @@ struct GameDetailView: View {
         }
     }
 
-    @discardableResult private func addNextRound() -> Round? {
-        let nextIndex = (game.roundsSorted.last?.index ?? -1) + 1
-        guard nextIndex < game.totalRounds else { return nil }
-        guard !game.rounds.contains(where: { $0.index == nextIndex }) else { return nil }
-
-        let dealer = game.dealer(forRoundIndex: nextIndex)
-        let R = game.cardsPerPlayer(forRoundIndex: nextIndex)
-        let round = Round(index: nextIndex, cardsPerPlayer: R, dealer: dealer, players: game.orderedPlayers)
-
-        modelContext.insert(round)
-        round.entries.forEach { modelContext.insert($0) }
-        game.rounds.append(round)
-        return round
-    }
-    
     private func currentRoundCompletionMessage() -> String? {
         guard let round = currentRound else { return nil }
         return RoundValidator.validate(round: round, enforceDealerForbidden: game.dealerForbiddenBidEnabled)

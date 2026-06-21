@@ -278,21 +278,10 @@ struct NewGameView: View {
             if let n = vm.maximumHandSize { vm.maximumHandSize = min(max(1, n), allowed) }
         }
         let game = vm.createGame(modelContext: modelContext)
-        ensureCurrentRoundExists(game: game, modelContext: modelContext)
+        game.appendNextRound(into: modelContext)
         dismiss()
         onGameCreated(game)
     }
 
-    private func ensureCurrentRoundExists(game: Game, modelContext: ModelContext) {
-        if game.rounds.isEmpty {
-            let idx = 0
-            let dealer = game.dealer(forRoundIndex: idx)
-            let R = game.cardsPerPlayer(forRoundIndex: idx)
-            let round = Round(index: idx, cardsPerPlayer: R, dealer: dealer, players: game.orderedPlayers)
-            modelContext.insert(round)
-            round.entries.forEach { modelContext.insert($0) }
-            game.rounds.append(round)
-        }
-    }
 }
 
